@@ -1,0 +1,105 @@
+# Leica LAS X, Life Science widefield layout.
+#
+# Written in our own words from public facility guides. Each note carries the
+# guide it came from in `source`:
+#   tamu = Texas A&M Microscopy and Imaging Center, "Leica DM6B User Guide" (July 2026)
+#          https://microscopy.tamu.edu/wp-content/uploads/2020/12/Leica_DM6B_User_Guide.pdf
+#   ieo  = IEO Imaging Unit, "Leica Histo-Fluo instructions" v2.0 (2018)
+#          https://research.ieo.it/media/1270/leica_histo-fluo_instructions_v20.pdf
+#   ucl  = UCL LMCB light microscopy wiki, "LEICA 2 - Instructions"
+#
+# Status: unverified on a live system.
+
+name = "Leica LAS X (Life Science widefield layout)"
+summary = """
+The LAS X edition used with Leica research microscopes such as the DM6 B. It is \
+organised as a workflow across the top (Configuration, Acquire, Process, \
+Quantify), with acquisition settings in panels down the left.
+"""
+
+layout = [
+    "Workflow steps run across the top: Configuration, Acquire, Process, Quantify. Imaging is done under Acquire. (tamu)",
+    "The Acquire screen has acquisition parameters and file/project settings on the left, the image in the middle and its display controls beside it. (tamu)",
+    "Saved images appear in an 'Open projects' list; right-clicking an entry there offers export and 'Apply Image Settings'. (tamu, ucl)",
+    "LAS X Navigator, for overviews and tile scans, is a separate view opened from a button on the Acquire screen. (tamu, ieo)",
+]
+
+[[control]]
+task = "Start the live image"
+where = "Live button on the Acquire screen, at the bottom of the left panel."
+source = "ucl"
+
+[[control]]
+task = "Capture an image"
+where = "Capture Image button beside Live."
+source = "ucl"
+
+[[control]]
+task = "Choose the objective"
+where = "Magnification selector in the Acquire panel; a separate 'Magnification Changer' drop-down sets any intermediate magnification."
+source = "ucl"
+
+[[control]]
+task = "Pick the contrast method or fluorescence channel"
+where = "The channel pull-down in the acquisition panel. For reflected light on a DM6 B the guide selects 'BF-BF' there and the IL-Fld settings."
+source = "tamu"
+
+[[control]]
+task = "White balance"
+where = "Draw a Rectangle ROI on an empty area of the image, then press White Balance."
+source = "tamu, ucl"
+
+[[control]]
+task = "See over- and under-exposed pixels"
+where = "The 'Glow Over Under' button in the image display controls."
+source = "ucl"
+
+[[control]]
+task = "Camera choice and bit depth"
+where = "Preferences: 'Set Camera To' picks the camera and 'Set Digitization to' picks the bit depth. Camera Preferences is also reachable from the Light Path panel."
+source = "ieo, tamu"
+
+[[control]]
+task = "Shading correction"
+where = "Linked Shading, in the Light Path panel."
+source = "tamu, ieo"
+
+[[control]]
+task = "File naming and autosave"
+where = "The File/Project Settings tab in the left panel."
+source = "tamu"
+
+[[control]]
+task = "Z-stacks, time lapse and multi-position experiments"
+where = "The Stage Experiments button on the Acquire screen."
+source = "tamu"
+
+[[control]]
+task = "Tile scan or slide overview"
+where = "Open LAS X Navigator with the Navigator button; Spiral scans outward from the current field, and Mosaic Merge stitches the tiles."
+source = "tamu, ieo"
+
+[[control]]
+task = "Reuse the settings of an earlier image"
+where = "Right-click the image in Open projects and choose Apply Image Settings."
+source = "tamu"
+
+[[control]]
+task = "Export an image"
+where = "Right-click the image in Open projects and choose the export entry."
+source = "ucl"
+
+[[trap]]
+symptom = "Settings or panels described here are missing"
+advice = "Check whether Easy Mode is on; the guide says to make sure it is not selected, because it hides controls."
+source = "tamu"
+
+[[trap]]
+symptom = "The software opens to a hardware setup screen, not the microscope"
+advice = "The user has probably started the LAS X Hardware Configurator; the guide says to start LAS X itself."
+source = "tamu"
+
+[[trap]]
+symptom = "Apply Image Settings did not restore everything"
+advice = "The guide warns that some settings, such as the condenser aperture, do not always load correctly and need checking by hand."
+source = "tamu"

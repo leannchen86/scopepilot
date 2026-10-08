@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+dist/
+*.egg-info/
+uv.lock
+
+# Screenshots and guides belong to their publishers. They are fetched into a
+# local cache and must never be committed. See evals/README.md.
+.cache/
+out/
+*.png
+*.jpg
+*.jpeg
+*.pdf

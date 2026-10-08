@@ -1,0 +1,26 @@
+# Public guides that show the Leica LAS X interface.
+#
+# Pointers only. The guides belong to their publishers; `scopepilot corpus fetch`
+# downloads them into a private local cache. The sha256 pins the exact file the
+# test cases were labelled against.
+
+[[source]]
+id = "lyon-arboretum-seed-guide"
+url = "http://seedsofhawaii.org/wp-content/uploads/2025/05/Imaging-Your-Seed-Collection.pdf"
+profile = "lasx-industry"
+publisher = "Lyon Arboretum Seed Conservation Laboratory"
+sha256 = "95a2555a8e167af0064ff8af4bcd35b69b92cba2525451686a9d619a2480bc3b"
+
+[[source]]
+id = "tamu-dm6b-guide"
+url = "https://microscopy.tamu.edu/wp-content/uploads/2020/12/Leica_DM6B_User_Guide.pdf"
+profile = "lasx-widefield"
+publisher = "Texas A&M Microscopy and Imaging Center"
+sha256 = "9e498eb3e5e4f539983fc32d0afca6358685bec9dc49492690b11171980ea6e8"
+
+[[source]]
+id = "ieo-histo-fluo"
+url = "https://research.ieo.it/media/1270/leica_histo-fluo_instructions_v20.pdf"
+profile = "lasx-widefield"
+publisher = "IEO Imaging Unit"
+sha256 = "1f8563c387e77ec05739c56d8c80cf2b32dee11eebb3c327a77a412e268c64db"

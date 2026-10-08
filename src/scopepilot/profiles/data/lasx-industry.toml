@@ -1,0 +1,121 @@
+# Leica LAS X, Industry / applied-microscopy layout.
+#
+# Written in our own words from public facility guides. Each note carries the
+# guide it came from in `source`:
+#   lyon  = Lyon Arboretum, "Imaging Your Seed Collection" (M205 C stereo, K3C camera)
+#           http://seedsofhawaii.org/imaging-your-seed-collection-a-how-to-guide/
+#   mill  = Georgia Tech MILL, "Leica DVM6 Digital Microscope SOP"
+#           https://mill.mse.gatech.edu/sop/digital-microscope/
+#   dvm6  = Leica DVM6 user manual, "LAS X Basic Functions"
+#
+# Status: unverified on a live system. Neither guide states its LAS X version,
+# and nothing here has been checked against LAS X 5.x.
+
+name = "Leica LAS X (Industry layout)"
+summary = """
+The LAS X edition used with Leica stereo, digital and materials microscopes. \
+It is organised around icon toolbars, not the Acquire/Process tabs of the \
+life-science edition. Icons are small and often have no text label.
+"""
+
+layout = [
+    "The screen has an image area in the middle, a left toolbar, a work space, a right toolbar and a status bar along the bottom. (dvm6)",
+    "A row of icon boxes at the top left switches the left panel between Explorer, Image, Illumination, Magnification, Z-stack and Autofocus. (lyon)",
+    "The acquisition buttons sit at the bottom left: Software Autofocus, Live Image, Single Capture and the Z-stack start button. (lyon)",
+    "Annotation tools and scale-bar settings are small boxes at the edge of the image area, not in the left panel. (lyon)",
+]
+
+[[control]]
+task = "Start or stop the live image"
+where = "Live Image button, bottom left."
+source = "lyon"
+
+[[control]]
+task = "Capture a single image"
+where = "Single Capture button, bottom left, next to Live Image."
+source = "lyon"
+
+[[control]]
+task = "Autofocus"
+where = "Software Autofocus button, bottom left; its settings are under the Autofocus icon box, top left."
+source = "lyon"
+
+[[control]]
+task = "Choose where images are saved and their file format"
+where = "Explorer icon box, top left; the format is the 'Acquisition format' drop-down there."
+source = "lyon"
+
+[[control]]
+task = "Exposure, gain and colour mode"
+where = "Image icon box, top left. A 'Camera Profile' drop-down in the same panel recalls saved settings."
+source = "lyon"
+
+[[control]]
+task = "HDR, averaging, sharpening, colour temperature"
+where = "Image icon box, top left, then its Advanced tab."
+source = "lyon"
+
+[[control]]
+task = "Lamp or ring-light brightness"
+where = "Illumination icon box, top left; brightness is set with sliders. On a DVM6 a 'Scene' drop-down picks a lighting preset."
+source = "lyon, mill"
+
+[[control]]
+task = "Zoom and iris"
+where = "Magnification icon box, top left."
+source = "lyon"
+
+[[control]]
+task = "Set up a Z-stack"
+where = "Z-stack icon box, top left. Modes are Custom, Symmetric and Start up; set Begin and End, or use System Optimized for the step count. Run it with the Z-stack start button, bottom left."
+source = "lyon"
+
+[[control]]
+task = "Extended depth of field from a Z-stack"
+where = "On a DVM6 this is under Multifocus Images, followed by 'Calculate an Extended Depth of Field'."
+source = "mill"
+
+[[control]]
+task = "Tile scan or stitching"
+where = "On a DVM6 this is Tilescan, reached from the Stage menu; the Spiral button there scans outward from the current position."
+source = "mill"
+
+[[control]]
+task = "Draw annotations on the image"
+where = "Annotation Tools: the first small box on the left edge of the image area."
+source = "lyon"
+
+[[control]]
+task = "Show or change the scale bar"
+where = "Scale Bar Properties button, immediately right of the Annotation Tools button. 'Adaptive Mode' is at the top left of that dialog."
+source = "lyon"
+
+[[control]]
+task = "Burn annotations and scale bar into the saved image"
+where = "The stamp button beside the annotation tools."
+source = "lyon"
+
+[[trap]]
+symptom = "The Stage menu, navigation arrows or Tile Scan are missing"
+advice = "A known recurring problem on a DVM6; it is a system state, not a hidden menu. Tell the user to check with the facility before hunting for the control."
+source = "mill"
+
+[[trap]]
+symptom = "Time lapse is greyed out"
+advice = "Listed as a recurring problem in the facility guide; say so instead of pointing at the disabled control."
+source = "mill"
+
+[[trap]]
+symptom = "The live image is black"
+advice = "Listed as a recurring problem; check illumination and exposure before assuming the camera has failed."
+source = "mill"
+
+[[trap]]
+symptom = "The scale bar is missing from, or wrong in, a saved image"
+advice = "Scale bars are only saved into the image after stamping, and should be re-checked after a Z-stack."
+source = "lyon, mill"
+
+[[trap]]
+symptom = "LAS X is slow to start"
+advice = "The guide's fix is to clear LAS X temporary files before opening it. That is outside the software; mention it and stop."
+source = "lyon"
