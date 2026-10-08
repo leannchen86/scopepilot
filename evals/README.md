@@ -51,6 +51,30 @@ labelled box. That is the spot a user following the pointer would click.
 - A hit means the pointer was right. It says nothing about whether the written
   steps were right; those are not scored yet.
 
+## First reading (8 October 2026)
+
+23 of 23 pointers landed on the labelled control, with and without the second,
+zoomed-in look.
+
+Do not read that as "it works". What it shows is that a current Claude model
+can find a named or clearly described control on a clean LAS X screenshot.
+What limits it:
+
+- **It was a stand-in run.** No API credentials were available, so agents in a
+  Claude Code session answered scopepilot's own two prompts on the images
+  scopepilot would send, and the answers were replayed through `locate()`. The
+  real API path has not been run on these cases.
+- **The labels are all `draft`.** They were drawn and checked by automated
+  passes with the same family of model that then answered the questions.
+- **The cases are easy.** Every target is on screen, most carry readable text,
+  and some questions narrow the search ("which entry in this menu"). A perfect
+  score means the set cannot yet tell a good version from a better one.
+- **23 cases, three guides, no live system.**
+
+What the set needs next: controls that are not on the current screen, icon-only
+buttons with look-alikes, questions with no good answer, and screenshots from a
+layout the notes were not written from.
+
 ## Adding a case
 
 1. Run `scopepilot corpus fetch` and pick a screenshot from the cache.

@@ -6,7 +6,7 @@ from PIL import Image
 
 
 def case(status="verified"):
-    return Case("c1", "src", 1, 0, "start live view", Box(100, 100, 140, 120), status)
+    return Case("c1", "src", 1, 0, "start live view", Box(100, 100, 140, 120), status=status)
 
 
 def answer(box):

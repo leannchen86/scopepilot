@@ -1,1 +1,237 @@
-# Test cases are added once labels have been checked. See ../README.md.
+# Test cases for Leica LAS X. See ../README.md for how these are used.
+#
+# `box` is left, top, right, bottom in pixels of the screenshot that
+# `scopepilot corpus fetch` extracts for that page and image number.
+#
+# Every label here was drawn by one automated pass and checked by a second.
+# None has been checked by a person yet, so all are `draft`.
+
+[[case]]
+id = "lyon-p014-a"
+source = "lyon-arboretum-seed-guide"
+page = 14
+image = 0
+question = "I just want the software to focus the sample for me right now - which button runs that (not the focus settings)?"
+control = "Leftmost button in the bottom-left action row: icon of a down arrow onto a stack (Software Autofocus)"
+box = [10, 987, 71, 1016]
+status = "draft"
+
+[[case]]
+id = "lyon-p014-b"
+source = "lyon-arboretum-seed-guide"
+page = 14
+image = 0
+question = "My focus range is already set up - which button actually starts acquiring the focus stack?"
+control = "Stacked-layers icon button in the bottom-left action row (icon half of the 4th box, left of its small circle)"
+box = [213, 987, 248, 1016]
+status = "draft"
+
+[[case]]
+id = "lyon-p022-a"
+source = "lyon-arboretum-seed-guide"
+page = 22
+image = 0
+question = "How do I take one ordinary snapshot of what the camera is showing right now, without stacking?"
+control = "Camera icon button in the bottom-left action row (icon half of the 3rd box, left of its small circle)"
+box = [117, 1080, 145, 1102]
+status = "draft"
+
+[[case]]
+id = "lyon-p022-b"
+source = "lyon-arboretum-seed-guide"
+page = 22
+image = 0
+question = "How do I make the camera record in greyscale instead of colour?"
+control = "Radio button \"Black and White mode\" in the Image panel (circle plus its label)"
+box = [131, 171, 236, 186]
+status = "draft"
+
+[[case]]
+id = "lyon-p035-a"
+source = "lyon-arboretum-seed-guide"
+page = 35
+image = 0
+question = "I've right-clicked a folder in the Explorer - which entry in this menu makes a new folder inside it?"
+control = "Context-menu item \"Create new sub folder\" (last entry of the Explorer right-click menu)"
+box = [1334, 1017, 1625, 1055]
+status = "draft"
+
+[[case]]
+id = "lyon-p036-a"
+source = "lyon-arboretum-seed-guide"
+page = 36
+image = 0
+question = "Where do I enter how many micrometres one pixel covers horizontally for this imported picture?"
+control = "Number field showing 0.000000 to the right of \"XPixelLength =\" in the small calibration dialog"
+box = [991, 748, 1167, 772]
+status = "draft"
+
+[[case]]
+id = "lyon-p036-b"
+source = "lyon-arboretum-seed-guide"
+page = 36
+image = 0
+question = "Once the calibration is done, which button actually brings this picture into LAS X?"
+control = "Button \"Import\" at the bottom right of the Image Importer window"
+box = [1529, 1145, 1644, 1188]
+status = "draft"
+
+[[case]]
+id = "lyon-p037-a"
+source = "lyon-arboretum-seed-guide"
+page = 37
+image = 0
+question = "How do I switch the camera to capture greyscale images instead of colour?"
+control = "\"Black and White mode\" radio button (with its label) in the Image panel"
+box = [133, 207, 257, 228]
+status = "draft"
+
+[[case]]
+id = "lyon-p037-b"
+source = "lyon-arboretum-seed-guide"
+page = 37
+image = 1
+question = "Where do I change the resolution (megapixels) the camera records at?"
+control = "\"Image Size\" drop-down showing \"6.3MP, 3072x2048, 3:2\""
+box = [120, 141, 272, 157]
+status = "draft"
+
+[[case]]
+id = "lyon-p037-c"
+source = "lyon-arboretum-seed-guide"
+page = 37
+image = 1
+question = "I've focused just past the far side of the seed - how do I mark the current focus position as where the z-stack should stop?"
+control = "Red \"End\" button in the Z-Stack panel (not the arrow button to its right)"
+box = [67, 701, 97, 720]
+status = "draft"
+
+[[case]]
+id = "lyon-p038-a"
+source = "lyon-arboretum-seed-guide"
+page = 38
+image = 0
+question = "Once I've entered the real length of the red line in this recalibration window, which button makes the image use the new calibration?"
+control = "\"Apply\" button at the bottom right of the Recalibrate Image dialog"
+box = [1632, 515, 1688, 531]
+status = "draft"
+
+[[case]]
+id = "lyon-p038-b"
+source = "lyon-arboretum-seed-guide"
+page = 38
+image = 0
+question = "How do I stop the software from automatically building a merged all-in-focus image after it acquires the stack?"
+control = "ON/OFF toggle switch (showing \"ON\") to the right of \"Calculate extended depth of field image\""
+box = [196, 1021, 229, 1038]
+status = "draft"
+
+[[case]]
+id = "lyon-p038-c"
+source = "lyon-arboretum-seed-guide"
+page = 38
+image = 1
+question = "In the small pixel-size box, I'd rather calibrate this imported photo by measuring something of known size on it than type in pixel lengths - what do I press?"
+control = "\"Measured\" button in the small XPixelLength/YPixelLength dialog"
+box = [1248, 701, 1302, 720]
+status = "draft"
+
+[[case]]
+id = "lyon-p039-a"
+source = "lyon-arboretum-seed-guide"
+page = 39
+image = 0
+question = "The folder I want to save the imported image into doesn't exist yet - how do I create one from this window?"
+control = "\"Make New Folder\" button at the bottom left of the Browse For Folder dialog"
+box = [1068, 936, 1166, 955]
+status = "draft"
+
+[[case]]
+id = "lyon-p039-b"
+source = "lyon-arboretum-seed-guide"
+page = 39
+image = 1
+question = "How do I get rid of the \"5 mm\" text above the scale bar but keep the bar itself?"
+control = "\"Show label\" checkbox (ticked, with its label) in the Scalebar Properties panel"
+box = [11, 172, 73, 185]
+status = "draft"
+
+[[case]]
+id = "ieo-p002-a"
+source = "ieo-histo-fluo"
+page = 2
+image = 0
+question = "How do I add a Z-stack to this acquisition?"
+control = "\"z\" toggle button in the Acquisition Mode row (x / y / z / t)"
+box = [95, 112, 124, 143]
+status = "draft"
+
+[[case]]
+id = "ieo-p002-b"
+source = "ieo-histo-fluo"
+page = 2
+image = 0
+question = "How do I change the camera's gain setting?"
+control = "Drop-down showing 'low noise & high well' next to the 'Gain List :' caption"
+box = [127, 313, 304, 333]
+status = "draft"
+
+[[case]]
+id = "ieo-p002-c"
+source = "ieo-histo-fluo"
+page = 2
+image = 1
+question = "How do I show the histogram on a logarithmic scale so the small peaks are easier to see?"
+control = "'Log' button at the top-left corner of the histogram plot"
+box = [730, 396, 754, 407]
+status = "draft"
+
+[[case]]
+id = "ieo-p004-a"
+source = "ieo-histo-fluo"
+page = 4
+image = 0
+question = "How do I make the stage scan outward from where I am now and build up a stitched map of the surrounding area?"
+control = "'Spiral' button in the bottom-left button row of the Navigator"
+box = [274, 714, 319, 733]
+status = "draft"
+
+[[case]]
+id = "ieo-p004-b"
+source = "ieo-histo-fluo"
+page = 4
+image = 0
+question = "How do I save the whole Navigator map built from all my preview scans, rather than merging one tile scan?"
+control = "'Save Overview ...' button on the right-hand panel, below the Images list"
+box = [1282, 473, 1367, 491]
+status = "draft"
+
+[[case]]
+id = "ieo-p005-a"
+source = "ieo-histo-fluo"
+page = 5
+image = 3
+question = "Can the software find the focus for me automatically?"
+control = "'Autofocus' button at the bottom-left of the window"
+box = [10, 1195, 89, 1230]
+status = "draft"
+
+[[case]]
+id = "ieo-p005-b"
+source = "ieo-histo-fluo"
+page = 5
+image = 3
+question = "How do I get a continuous camera view on screen so I can focus my sample?"
+control = "'Live' button (with round indicator) in the bottom-left button row"
+box = [99, 1195, 176, 1230]
+status = "draft"
+
+[[case]]
+id = "tamu-p017-a"
+source = "tamu-dm6b-guide"
+page = 17
+image = 1
+question = "Where do I go to switch between the colour and the monochrome camera?"
+control = "'Preferences' link in the camera box (under 'Leica DFC9000 GT VSC-07817 | Default Camera')"
+box = [290, 161, 341, 173]
+status = "draft"

@@ -33,6 +33,8 @@ class Case:
     question: str
     box: Box
     """The labelled control, in pixels of the extracted image."""
+    control: str = ""
+    """What the labelled control is, for the person checking the label."""
     status: str = "draft"
     """draft until a person has checked the label, then verified."""
 
