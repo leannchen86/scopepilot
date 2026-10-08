@@ -1,6 +1,7 @@
 import json
 from types import SimpleNamespace
 
+import anthropic
 import pytest
 from PIL import Image
 
@@ -76,5 +77,30 @@ def test_claude_code_result_text_is_parsed_when_there_is_no_structured_output():
     ["not json", json.dumps({"is_error": True, "result": "boom"}), json.dumps({"result": "hi"})],
 )
 def test_claude_code_bad_output_raises(stdout):
+    with pytest.raises(ModelError):
+        _parse_claude_code_output(stdout)
+
+
+def test_api_failures_become_model_errors():
+    class Unreachable:
+        def create(self, **request):
+            raise anthropic.AnthropicError("connection refused")
+
+    client = SimpleNamespace(messages=Unreachable(), beta=SimpleNamespace(messages=Unreachable()))
+
+    with pytest.raises(ModelError, match="could not reach the API"):
+        AnthropicBackend(client=client).ask("s", "q", [], SCHEMA)
+
+
+@pytest.mark.parametrize("text", ["not json", "[1, 2]", '"just a string"'])
+def test_api_answers_that_are_not_a_json_object_raise(text):
+    client, _, _ = fake_client(reply(text=text))
+
+    with pytest.raises(ModelError):
+        AnthropicBackend(client=client).ask("s", "q", [], SCHEMA)
+
+
+@pytest.mark.parametrize("stdout", ["[1]", json.dumps({"result": "[1]"}), json.dumps({"result": None})])
+def test_claude_code_output_that_is_not_a_json_object_raises(stdout):
     with pytest.raises(ModelError):
         _parse_claude_code_output(stdout)

@@ -22,6 +22,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any, Protocol
 
+import anthropic
 from PIL import Image
 
 DEFAULT_MODEL = "claude-opus-5-5"
@@ -54,8 +55,6 @@ class AnthropicBackend:
         client: Any = None,
     ) -> None:
         if client is None:
-            import anthropic
-
             client = anthropic.Anthropic()
         self._client = client
         self.model = model
@@ -85,12 +84,20 @@ class AnthropicBackend:
                 "format": {"type": "json_schema", "schema": schema},
             },
         }
-        if self.fallbacks:
-            response = self._client.beta.messages.create(
-                betas=["server-side-fallback-2026-07-01"], fallbacks="default", **request
-            )
-        else:
-            response = self._client.messages.create(**request)
+        try:
+            if self.fallbacks:
+                response = self._client.beta.messages.create(
+                    betas=["server-side-fallback-2026-07-01"], fallbacks="default", **request
+                )
+            else:
+                response = self._client.messages.create(**request)
+        except anthropic.APIStatusError as error:
+            raise ModelError(f"the API returned {error.status_code}: {error.message}") from error
+        except anthropic.AnthropicError as error:
+            raise ModelError(f"could not reach the API: {type(error).__name__}: {error}") from error
+        except TypeError as error:
+            # The SDK raises TypeError at request time when it finds no credentials.
+            raise ModelError(f"the API client could not send the request: {error}") from error
 
         if response.stop_reason == "refusal":
             raise ModelError("the model declined the request")
@@ -99,7 +106,7 @@ class AnthropicBackend:
         text = next((block.text for block in response.content if block.type == "text"), None)
         if text is None:
             raise ModelError("the response contained no text")
-        return json.loads(text)
+        return _json_object(text, "the API")
 
 
 class ClaudeCodeBackend:
@@ -145,20 +152,27 @@ class ClaudeCodeBackend:
         return _parse_claude_code_output(done.stdout)
 
 
-def _parse_claude_code_output(stdout: str) -> dict[str, Any]:
+def _json_object(text: str, sender: str) -> dict[str, Any]:
+    """Parse `text` as a JSON object, or raise ModelError saying who sent it."""
     try:
-        envelope = json.loads(stdout)
-    except json.JSONDecodeError as error:
-        raise ModelError(f"claude printed something that is not JSON: {stdout[:300]}") from error
+        value = json.loads(text)
+    except (TypeError, json.JSONDecodeError) as error:
+        raise ModelError(f"{sender} returned something that is not JSON: {str(text)[:300]}") from error
+    if not isinstance(value, dict):
+        raise ModelError(f"{sender} returned JSON that is not an object: {str(text)[:300]}")
+    return value
+
+
+def _parse_claude_code_output(stdout: str) -> dict[str, Any]:
+    envelope = _json_object(stdout, "claude")
     if envelope.get("is_error"):
         raise ModelError(f"claude reported an error: {str(envelope.get('result'))[:500]}")
     structured = envelope.get("structured_output")
     if isinstance(structured, dict):
         return structured
-    try:
-        return json.loads(envelope["result"])
-    except (KeyError, TypeError, json.JSONDecodeError) as error:
-        raise ModelError("claude returned no structured answer") from error
+    if "result" not in envelope:
+        raise ModelError("claude returned no structured answer")
+    return _json_object(envelope["result"], "claude")
 
 
 def default_backend(model: str = DEFAULT_MODEL) -> Backend:

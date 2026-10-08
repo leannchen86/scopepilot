@@ -1,7 +1,8 @@
 """Measure how often the pointer lands on the right control.
 
-A case is one screenshot, one question and a hand-labelled box around the
-control that answers it. A case is a hit when the centre of the box scopepilot
+A case is one screenshot, one question and a labelled box around the control
+that answers it. Labels start as drafts and count as verified only once a
+person has checked them. A case is a hit when the centre of the box scopepilot
 returns falls inside the labelled box: that is where a user following the
 pointer would click.
 """

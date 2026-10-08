@@ -15,6 +15,10 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
+class CorpusError(RuntimeError):
+    """A guide could not be fetched or read."""
+
+
 def cache_dir() -> Path:
     root = os.environ.get("SCOPEPILOT_CACHE")
     return Path(root) if root else Path.home() / ".cache" / "scopepilot"
@@ -51,34 +55,56 @@ def sha256_of(path: Path) -> str:
 
 
 def fetch(source: Source) -> Path:
-    """Download the guide if it is not cached, and check it against its recorded hash."""
-    if not source.pdf.exists():
-        source.directory.mkdir(parents=True, exist_ok=True)
+    """Make sure the cached guide is the one the test cases were labelled against.
+
+    Downloads when the guide is missing or does not match its recorded hash. A
+    download only replaces the cached file once it has been checked, so a bad
+    response never gets stuck in the cache.
+    """
+    if source.pdf.exists() and (not source.sha256 or sha256_of(source.pdf) == source.sha256):
+        return source.pdf
+
+    source.directory.mkdir(parents=True, exist_ok=True)
+    partial = source.directory / "guide.pdf.part"
+    try:
         request = urllib.request.Request(source.url, headers={"User-Agent": "scopepilot"})
         with urllib.request.urlopen(request, timeout=120) as response:
-            source.pdf.write_bytes(response.read())
-    actual = sha256_of(source.pdf)
-    if source.sha256 and actual != source.sha256:
-        raise ValueError(
-            f"{source.id}: the guide has changed since the test cases were labelled "
-            f"(expected sha256 {source.sha256[:12]}, got {actual[:12]}); page and image "
-            f"numbers may no longer line up"
-        )
+            partial.write_bytes(response.read())
+        if not partial.read_bytes().startswith(b"%PDF-"):
+            raise CorpusError(f"{source.id}: {source.url} did not return a PDF")
+        actual = sha256_of(partial)
+        if source.sha256 and actual != source.sha256:
+            raise CorpusError(
+                f"{source.id}: the guide at {source.url} is not the file the test cases were "
+                f"labelled against (expected sha256 {source.sha256[:12]}, got {actual[:12]}); "
+                f"page and image numbers may no longer line up"
+            )
+        os.replace(partial, source.pdf)
+    finally:
+        partial.unlink(missing_ok=True)
     return source.pdf
 
 
 def extract_images(source: Source, min_width: int = 500) -> list[Path]:
     """Write every embedded image at least `min_width` wide to the cache as PNG."""
-    from pypdf import PdfReader
+    try:
+        from pypdf import PdfReader
+    except ModuleNotFoundError as error:
+        raise CorpusError(
+            'reading guides needs pypdf; install it with: pip install "scopepilot[corpus]"'
+        ) from error
 
     out_dir = source.directory / "images"
     out_dir.mkdir(parents=True, exist_ok=True)
     written = []
     for page_number, page in enumerate(PdfReader(source.pdf).pages, start=1):
-        for index, embedded in enumerate(page.images):
+        images = page.images
+        # By index, not by iterating: pypdf decodes an image when it is looked
+        # up, and one it cannot decode must be skipped without losing its number.
+        for index in range(len(images)):
             try:
-                image = embedded.image
-            except Exception:  # pypdf raises several types on images it cannot decode
+                image = images[index].image
+            except Exception:  # pypdf and Pillow raise several types here
                 continue
             if image is None or image.width < min_width:
                 continue

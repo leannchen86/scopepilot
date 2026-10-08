@@ -139,7 +139,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         return args.run(args)
-    except (ModelError, FileNotFoundError, KeyError, ValueError) as error:
+    except (ModelError, corpus.CorpusError, OSError, KeyError, ValueError) as error:
         print(f"scopepilot: {error}", file=sys.stderr)
         return 1
 

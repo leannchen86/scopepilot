@@ -17,18 +17,23 @@ Early. What exists today:
   of the screenshot with the control outlined. It only looks and points. It does
   not click, type or connect to the microscope.
 - **Layout notes for Leica LAS X**, in two variants (`lasx-industry` and
-  `lasx-widefield`), written from public facility guides.
+  `lasx-widefield`), written from public facility guides and, for a few notes,
+  Leica's public DVM6 manual.
 - **A test harness** that measures how often the pointer lands on the right
   control, using screenshots from those public guides.
 
 Nothing here has been tested on a live Leica system yet. The layout notes come
-from guides that do not all state their LAS X version, so treat them as a
+from sources that do not all state their LAS X version, so treat them as a
 starting point.
 
 ## Use
 
 ```bash
 uv venv && uv pip install -e ".[dev]"
+```
+
+```bash
+source .venv/bin/activate
 ```
 
 ```bash
@@ -56,7 +61,9 @@ The code is small: [locate.py](src/scopepilot/locate.py) is the two-pass logic,
 
 See [evals/README.md](evals/README.md). In short: the repository stores only
 pointers to public guides, a script fetches them into a private local cache,
-and each test case is a question plus a hand-labelled box on one screenshot.
+and each test case is a question plus a labelled box on one screenshot. Labels
+start as machine-drawn drafts and count as verified only after a person has
+checked them.
 
 ## Ground rules
 

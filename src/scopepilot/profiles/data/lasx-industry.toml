@@ -1,118 +1,128 @@
 # Leica LAS X, Industry / applied-microscopy layout.
 #
-# Written in our own words from public facility guides. Each note carries the
-# guide it came from in `source`:
+# Written in our own words from public facility guides and one public Leica
+# manual. Each note carries the source it came from in `source`:
 #   lyon  = Lyon Arboretum, "Imaging Your Seed Collection" (M205 C stereo, K3C camera)
 #           http://seedsofhawaii.org/imaging-your-seed-collection-a-how-to-guide/
 #   mill  = Georgia Tech MILL, "Leica DVM6 Digital Microscope SOP"
 #           https://mill.mse.gatech.edu/sop/digital-microscope/
-#   dvm6  = Leica DVM6 user manual, "LAS X Basic Functions"
+#   dvm6  = Leica DVM6 user manual, section "LAS X Basic Functions" (vendor
+#           manual; named here, not copied)
 #
-# Status: unverified on a live system. Neither guide states its LAS X version,
-# and nothing here has been checked against LAS X 5.x.
+# Positions marked lyon are partly read from that guide's screenshots as well
+# as its text.
+#
+# Status: unverified on a live system. Neither facility guide states its LAS X
+# version, and nothing here has been checked against LAS X 5.x. Notes that
+# apply to one instrument say so in the text, because only the text reaches
+# the model.
 
 name = "Leica LAS X (Industry layout)"
 summary = """
 The LAS X edition used with Leica stereo, digital and materials microscopes. \
-It is organised around icon toolbars, not the Acquire/Process tabs of the \
-life-science edition. Icons are small and often have no text label.
+A workflow bar across the top shows Configuration and Acquire, as in the \
+life-science edition, but within Acquire the controls sit behind a column of \
+icon boxes on the left edge instead of labelled tab panels. Icons are small \
+and often have no text label.
 """
 
 layout = [
-    "The screen has an image area in the middle, a left toolbar, a work space, a right toolbar and a status bar along the bottom. (dvm6)",
-    "A row of icon boxes at the top left switches the left panel between Explorer, Image, Illumination, Magnification, Z-stack and Autofocus. (lyon)",
-    "The acquisition buttons sit at the bottom left: Software Autofocus, Live Image, Single Capture and the Z-stack start button. (lyon)",
-    "Annotation tools and scale-bar settings are small boxes at the edge of the image area, not in the left panel. (lyon)",
+    "The screen is divided into an image area, a left toolbar, a work space, a right toolbar and a status bar. (dvm6)",
+    "A workflow bar at the very top shows Configuration and Acquire; imaging is done with Acquire selected. (lyon)",
+    "A column of six icon boxes runs down the left edge, starting at the top left under the workflow bar. From top to bottom they open the Explorer, Image, Illumination, Magnification, Z-stack and Autofocus panels; the chosen panel opens just to the right of the column. (lyon)",
+    "The acquisition buttons are a row along the bottom left: Software Autofocus, Live Image, Single Capture and the Z-stack start button. (lyon)",
+    "On an M205 C, annotation, scale-bar and overlay settings are a row of three small boxes at the top left of the screen, in the strip above the image, not in the left panel. (lyon)",
+    "On a DVM6 the measurement and label tools and the scale display are on the right toolbar, whose buttons slide out when the mouse reaches the right edge of the screen. (dvm6)",
 ]
 
 [[control]]
 task = "Start or stop the live image"
-where = "Live Image button, bottom left."
+where = "Live Image button in the bottom-left button row."
 source = "lyon"
 
 [[control]]
 task = "Capture a single image"
-where = "Single Capture button, bottom left, next to Live Image."
+where = "Single Capture button in the bottom-left button row, next to Live Image."
 source = "lyon"
 
 [[control]]
 task = "Autofocus"
-where = "Software Autofocus button, bottom left; its settings are under the Autofocus icon box, top left."
+where = "Software Autofocus button, first in the bottom-left button row, runs it. The Autofocus icon box in the left column, which carries a similar icon, only opens its settings."
 source = "lyon"
 
 [[control]]
 task = "Choose where images are saved and their file format"
-where = "Explorer icon box, top left; the format is the 'Acquisition format' drop-down there."
+where = "Explorer icon box in the left column; the format is the 'Acquisition format' drop-down in the Explorer."
 source = "lyon"
 
 [[control]]
 task = "Exposure, gain and colour mode"
-where = "Image icon box, top left. A 'Camera Profile' drop-down in the same panel recalls saved settings."
+where = "Image icon box in the left column. A 'Camera Profile' drop-down in the same panel recalls saved settings."
 source = "lyon"
 
 [[control]]
 task = "HDR, averaging, sharpening, colour temperature"
-where = "Image icon box, top left, then its Advanced tab."
+where = "Image icon box in the left column, then its Advanced tab."
 source = "lyon"
 
 [[control]]
 task = "Lamp or ring-light brightness"
-where = "Illumination icon box, top left; brightness is set with sliders. On a DVM6 a 'Scene' drop-down picks a lighting preset."
+where = "Illumination icon box in the left column; brightness is set with sliders. On a DVM6 a 'Scene' drop-down picks a lighting preset."
 source = "lyon, mill"
 
 [[control]]
 task = "Zoom and iris"
-where = "Magnification icon box, top left."
+where = "Magnification icon box in the left column."
 source = "lyon"
 
 [[control]]
 task = "Set up a Z-stack"
-where = "Z-stack icon box, top left. Modes are Custom, Symmetric and Start up; set Begin and End, or use System Optimized for the step count. Run it with the Z-stack start button, bottom left."
+where = "Z-stack icon box in the left column. Modes are Custom, Symmetric and Start up; set Begin and End, or use System Optimized for the step count. Run it with the Z-stack start button in the bottom-left row."
 source = "lyon"
 
 [[control]]
-task = "Extended depth of field from a Z-stack"
-where = "On a DVM6 this is under Multifocus Images, followed by 'Calculate an Extended Depth of Field'."
-source = "mill"
+task = "Extended depth of field (all-in-focus image) from a Z-stack"
+where = "The 'Calculate extended depth of field image' ON/OFF switch at the bottom of the Z-stack panel. Switch it on before running the stack. On a DVM6 the result is saved as a Multifocus Image, opened from the Explorer."
+source = "lyon, mill"
 
 [[control]]
 task = "Tile scan or stitching"
-where = "On a DVM6 this is Tilescan, reached from the Stage menu; the Spiral button there scans outward from the current position."
+where = "On a DVM6 both are in the Stage menu. Tilescan: mark positions on the overview grid, then start the experiment; Merge Images stitches the tiles. To stitch the whole sample, choose Spiral in the Stage menu, close the menu, then press the Stage button on the bottom toolbar to run it."
 source = "mill"
 
 [[control]]
 task = "Draw annotations on the image"
-where = "Annotation Tools: the first small box on the left edge of the image area."
-source = "lyon"
+where = "Annotation Tools: the leftmost of three small boxes at the top left of the screen, in the strip above the image (M205 C). On a DVM6 the measurement and label tools are on the right-side toolbar."
+source = "lyon, dvm6"
 
 [[control]]
 task = "Show or change the scale bar"
-where = "Scale Bar Properties button, immediately right of the Annotation Tools button. 'Adaptive Mode' is at the top left of that dialog."
-source = "lyon"
+where = "Scale Bar Properties: immediately right of Annotation Tools in the same row of small boxes; 'Adaptive Mode' is at the top left of that dialog (M205 C). On a DVM6 the scale is switched on with a button on the right-side toolbar."
+source = "lyon, dvm6"
 
 [[control]]
 task = "Burn annotations and scale bar into the saved image"
-where = "The stamp button beside the annotation tools."
-source = "lyon"
+where = "Turn on the stamp symbol in the 'Show or Hide Individual Overlays' window, opened from a button at the top left near the Annotation Tools. A stamp button then appears in the bottom-left button row; it is not shown while Live Image is running. Clicking it on a selected image saves a new copy with '_Overlay' in its name. On a DVM6 the stamp button is at the top of the right toolbar."
+source = "lyon, mill"
 
 [[trap]]
 symptom = "The Stage menu, navigation arrows or Tile Scan are missing"
-advice = "A known recurring problem on a DVM6; it is a system state, not a hidden menu. Tell the user to check with the facility before hunting for the control."
+advice = "On a DVM6 the facility guide gives the cause: the stage initialisation prompt was not accepted when LAS X started. Its fix is to close LAS X, switch the microscope off and on, start LAS X again and accept the stage and Z-drive prompts. Do not hunt for a hidden menu. Our addition, not from the guide: power-cycling the instrument is outside the software, so tell the user what the guide says and let them decide or ask their facility."
 source = "mill"
 
 [[trap]]
 symptom = "Time lapse is greyed out"
-advice = "Listed as a recurring problem in the facility guide; say so instead of pointing at the disabled control."
+advice = "On a DVM6 the facility guide says this control opens differently from the others: click and hold the time-lapse option until the ring around it completes, and click and hold again to switch it off. Point at the time-lapse control and say to click and hold."
 source = "mill"
 
 [[trap]]
 symptom = "The live image is black"
-advice = "Listed as a recurring problem; check illumination and exposure before assuming the camera has failed."
+advice = "On a DVM6 the facility guide says this is not a fault but image settings that have drifted far off, and that restarting will not help. Its fix is in the Image panel: put exposure, gain and colour mode back to the facility's usual values, reset the colour controls, then reset the LUT and the gamma from the bar under the histogram. Our addition, not from the guide: also check that the illumination is on."
 source = "mill"
 
 [[trap]]
 symptom = "The scale bar is missing from, or wrong in, a saved image"
-advice = "Scale bars are only saved into the image after stamping, and should be re-checked after a Z-stack."
+advice = "Overlays are only written into the file when they are switched on in the overlays window and stamping is on. A Z-stack result has to be stamped afterwards with the stamp button. Separately, the scale bar produced after a Z-stack may be inaccurate, so check it against the live image."
 source = "lyon, mill"
 
 [[trap]]

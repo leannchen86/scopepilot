@@ -16,6 +16,10 @@ def fit_within(image: Image.Image, max_edge: int) -> Image.Image:
         return image
     ratio = max_edge / long_edge
     size = (max(1, round(image.width * ratio)), max(1, round(image.height * ratio)))
+    if image.mode in ("1", "P"):
+        # Pillow quietly falls back to nearest-neighbour for these modes, which
+        # drops the one-pixel strokes that small text and icons are made of.
+        image = image.convert("RGB")
     return image.resize(size, Image.Resampling.LANCZOS)
 
 

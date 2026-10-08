@@ -16,6 +16,9 @@ this repository. Do not add them.
 
 ## Running it
 
+Run these from the repository root, after the install step in the main README.
+From anywhere else, pass `--dir path/to/evals/lasx`.
+
 ```bash
 scopepilot corpus fetch
 ```
@@ -70,6 +73,9 @@ What limits it:
   and some questions narrow the search ("which entry in this menu"). A perfect
   score means the set cannot yet tell a good version from a better one.
 - **23 cases, three guides, no live system.**
+- **The layout notes have changed since.** A review found notes that said more
+  than the guides do, and they were corrected after this run. The corrected
+  notes have not been re-measured.
 
 What the set needs next: controls that are not on the current screen, icon-only
 buttons with look-alikes, questions with no good answer, and screenshots from a

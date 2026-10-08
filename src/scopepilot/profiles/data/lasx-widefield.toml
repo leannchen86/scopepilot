@@ -7,6 +7,10 @@
 #   ieo  = IEO Imaging Unit, "Leica Histo-Fluo instructions" v2.0 (2018)
 #          https://research.ieo.it/media/1270/leica_histo-fluo_instructions_v20.pdf
 #   ucl  = UCL LMCB light microscopy wiki, "LEICA 2 - Instructions"
+#          https://ucldata.atlassian.net/wiki/spaces/LMCBLMic/pages/38012004
+#
+# Positions marked ieo or tamu are partly read from those guides' screenshots
+# as well as their text.
 #
 # Status: unverified on a live system.
 
@@ -14,34 +18,36 @@ name = "Leica LAS X (Life Science widefield layout)"
 summary = """
 The LAS X edition used with Leica research microscopes such as the DM6 B. It is \
 organised as a workflow across the top (Configuration, Acquire, Process, \
-Quantify), with acquisition settings in panels down the left.
+Quantify). On the Acquire screen, acquisition settings are in a column on the \
+left, the Light Path panel is in the middle and the image is on the right.
 """
 
 layout = [
     "Workflow steps run across the top: Configuration, Acquire, Process, Quantify. Imaging is done under Acquire. (tamu)",
-    "The Acquire screen has acquisition parameters and file/project settings on the left, the image in the middle and its display controls beside it. (tamu)",
+    "The Acquire screen has three sections side by side: acquisition parameters and file/project settings in a column on the left, the Light Path panel (imaging mode, channel setup, camera selection) in the middle, and the image display on the right. (tamu)",
+    "A bar along the bottom of the Acquire screen holds Autofocus, Live, Single Image, Capture Image and Start. (ieo, tamu)",
     "Saved images appear in an 'Open projects' list; right-clicking an entry there offers export and 'Apply Image Settings'. (tamu, ucl)",
     "LAS X Navigator, for overviews and tile scans, is a separate view opened from a button on the Acquire screen. (tamu, ieo)",
 ]
 
 [[control]]
 task = "Start the live image"
-where = "Live button on the Acquire screen, at the bottom of the left panel."
-source = "ucl"
+where = "Live button on the bar along the bottom of the Acquire screen, under the left panel. It reads Stop while live is running."
+source = "ucl, ieo, tamu"
 
 [[control]]
 task = "Capture an image"
-where = "Capture Image button beside Live."
+where = "Capture Image button on the same bottom bar, further right, between Single Image and Start."
+source = "ucl, ieo, tamu"
+
+[[control]]
+task = "Tell the software which objective is in use"
+where = "Magnification selector in the Acquire panel. On the system in the guide the turret is turned by hand and this selection only records the objective for the image metadata. A separate 'Magnification Changer' drop-down records whether the 1.0x or 1.5x lens is in the light path. Whether either control moves the hardware on a motorised stand is not covered by any guide we have."
 source = "ucl"
 
 [[control]]
-task = "Choose the objective"
-where = "Magnification selector in the Acquire panel; a separate 'Magnification Changer' drop-down sets any intermediate magnification."
-source = "ucl"
-
-[[control]]
-task = "Pick the contrast method or fluorescence channel"
-where = "The channel pull-down in the acquisition panel. For reflected light on a DM6 B the guide selects 'BF-BF' there and the IL-Fld settings."
+task = "Pick the imaging mode or fluorescence channel"
+where = "The pull-down inside each channel box at the top of the Light Path panel, the middle section of the Acquire screen. For reflected light on a DM6 B the guide picks 'BF-BF' there, then goes to the Illumination settings panel on the left: select IL, keep its intensity low, and open the IL-Fld field aperture slider far enough to light the whole field."
 source = "tamu"
 
 [[control]]
@@ -51,32 +57,42 @@ source = "tamu, ucl"
 
 [[control]]
 task = "See over- and under-exposed pixels"
-where = "The 'Glow Over Under' button in the image display controls."
-source = "ucl"
+where = "The 'Glow Over Under' button, described as the top-left button of the image display panel."
+source = "ucl, tamu"
 
 [[control]]
 task = "Camera choice and bit depth"
-where = "Preferences: 'Set Camera To' picks the camera and 'Set Digitization to' picks the bit depth. Camera Preferences is also reachable from the Light Path panel."
+where = "Preferences: 'Set Camera To' picks the camera and 'Set Digitization to' picks the bit depth. Camera Preferences is also reachable from the camera box in the Light Path panel."
 source = "ieo, tamu"
 
 [[control]]
 task = "Shading correction"
-where = "Linked Shading, in the Light Path panel."
+where = "Linked Shading, in the camera box of the Light Path panel."
 source = "tamu, ieo"
 
 [[control]]
 task = "File naming and autosave"
-where = "The File/Project Settings tab in the left panel."
+where = "The File/Project Settings tab in the left column."
 source = "tamu"
 
 [[control]]
-task = "Z-stacks, time lapse and multi-position experiments"
+task = "Z-stack"
+where = "Switch on the 'z' toggle in the Acquisition Mode row at the top of the acquisition panel; the Z-stack settings with Begin and End then appear in the panel."
+source = "tamu, ieo"
+
+[[control]]
+task = "Time lapse"
+where = "Switch on the 't' toggle in the same Acquisition Mode row; the time-lapse settings then appear in the panel."
+source = "tamu, ieo"
+
+[[control]]
+task = "Multi-position experiment (several stage locations)"
 where = "The Stage Experiments button on the Acquire screen."
 source = "tamu"
 
 [[control]]
 task = "Tile scan or slide overview"
-where = "Open LAS X Navigator with the Navigator button; Spiral scans outward from the current field, and Mosaic Merge stitches the tiles."
+where = "Open LAS X Navigator with the Navigator button. There, Spiral builds a preview of the area from stitched fields until you press Stop, and the Merge button on the Mosaic Merge sheet stitches a tile scan."
 source = "tamu, ieo"
 
 [[control]]
@@ -90,8 +106,8 @@ where = "Right-click the image in Open projects and choose the export entry."
 source = "ucl"
 
 [[trap]]
-symptom = "Settings or panels described here are missing"
-advice = "Check whether Easy Mode is on; the guide says to make sure it is not selected, because it hides controls."
+symptom = "Easy Mode is selected"
+advice = "The guide tells users to make sure Easy Mode is not selected before imaging. It does not say why; our guess, not checked on a live system, is that Easy Mode shows a reduced set of controls, so it is worth checking if a panel described here cannot be found."
 source = "tamu"
 
 [[trap]]
@@ -103,3 +119,8 @@ source = "tamu"
 symptom = "Apply Image Settings did not restore everything"
 advice = "The guide warns that some settings, such as the condenser aperture, do not always load correctly and need checking by hand."
 source = "tamu"
+
+[[trap]]
+symptom = "Scale bar or measurements are wrong, or the objective did not change"
+advice = "On a manual stand the Magnification selector and Magnification Changer do not move anything; they must be set to match the objective and the 1.0x/1.5x lens actually in place, or the image scaling will be wrong."
+source = "ucl"

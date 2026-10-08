@@ -1,8 +1,9 @@
+from PIL import Image
+
 from scopepilot.evaluate import Case, Outcome, summarize
-from scopepilot.imaging import zoom_region
+from scopepilot.imaging import fit_within, zoom_region
 from scopepilot.profiles import available_profiles, load_profile
 from scopepilot.types import Box, Guidance
-from PIL import Image
 
 
 def case(status="verified"):
@@ -45,3 +46,15 @@ def test_every_profile_loads_and_cites_a_source_for_each_note():
         assert profile.controls
         for entry in (*profile.controls, *profile.traps):
             assert entry["source"], f"{profile_id}: {entry} has no source"
+
+
+def test_palette_screenshots_are_shrunk_with_real_resampling():
+    # One-pixel black and white stripes: nearest-neighbour would keep them pure,
+    # proper resampling blends them to grey.
+    stripes = Image.new("L", (400, 4))
+    stripes.putdata([255 * (x % 2) for _ in range(4) for x in range(400)])
+
+    shrunk = fit_within(stripes.convert("P"), 200)
+
+    assert shrunk.mode == "RGB"
+    assert 100 < shrunk.getpixel((100, 1))[0] < 160
