@@ -41,6 +41,8 @@ class Case:
     expect: str = "present"
     """present: the control is on this screenshot and `box` marks it.
     absent: it is not on this screenshot, and the right answer is to say so."""
+    kind: str = ""
+    """What makes the case hard, for the person reading the results."""
 
 
 @dataclass(frozen=True)

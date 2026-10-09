@@ -16,6 +16,12 @@ Early. What exists today:
   returns the control, its position and the steps to take, and can save a copy
   of the screenshot with the control outlined. It only looks and points. It does
   not click, type or connect to the microscope.
+- **Live guide mode, not yet seen on a real display.** `scopepilot guide` puts
+  a small prompt bar on your screen. Ask a question while the software is open
+  and it draws a ring around the control on the screen itself, with the steps
+  beside it. Clicks go straight through the ring to the software underneath.
+  Its arithmetic and window logic are tested without a display, but nobody has
+  yet run it on a real screen, on macOS or Windows.
 - **Layout notes for Leica LAS X**, in two variants (`lasx-industry` and
   `lasx-widefield`), written from public facility guides and, for a few notes,
   Leica's public DVM6 manual.
@@ -36,9 +42,22 @@ uv venv && uv pip install -e ".[dev]"
 source .venv/bin/activate
 ```
 
+On a saved screenshot:
+
 ```bash
 scopepilot where screenshot.png "how do I add a scale bar?" --profile lasx-industry --out marked.png
 ```
+
+On your own screen, with the software (or a screenshot of it) open:
+
+```bash
+scopepilot guide --profile lasx-industry
+```
+
+Type a question in the bar and press Enter. Esc clears the ring; Esc again
+quits. On macOS, the terminal you start it from needs the Screen Recording
+permission in System Settings, or macOS hands over the wallpaper with no
+windows on it.
 
 scopepilot needs a Claude model. It uses the Claude API when `ANTHROPIC_API_KEY`
 is set, and otherwise the [Claude Code](https://claude.com/claude-code) command
@@ -75,8 +94,8 @@ checked them.
 
 ## Roadmap
 
+- Run live guide mode on a real display, on macOS and on Windows.
 - Check the layout notes and accuracy on a real LAS X installation.
-- A live overlay that points at the control on the user's own screen.
 - Use the Windows accessibility tree where the software exposes one.
 - Backends for software with real programming interfaces (ZEISS ZEN, Nikon NIS-Elements).
 

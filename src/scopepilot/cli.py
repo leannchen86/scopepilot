@@ -1,4 +1,4 @@
-"""Command line: `scopepilot where`, `scopepilot corpus`, `scopepilot eval`."""
+"""Command line: `scopepilot where`, `scopepilot guide`, `scopepilot corpus`, `scopepilot eval`."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from scopepilot import corpus, evaluate
+from scopepilot import corpus, evaluate, live
 from scopepilot.imaging import annotate
 from scopepilot.locate import locate
 from scopepilot.model import (
@@ -63,6 +63,32 @@ def _where(args: argparse.Namespace) -> int:
     return 0
 
 
+_GUIDE_HELP = """\
+Ask a question while the microscope software is on screen; scopepilot outlines
+the control to use and shows the steps next to it. It only points: clicks go
+straight through the outline to the software underneath.
+
+Type in the bar and press Enter. Esc clears the outline; Esc again, or the
+close button, quits. Drag the bar to another monitor to ask about that one.
+
+On macOS the app you start scopepilot from (Terminal, iTerm, ...) needs the
+Screen Recording permission in System Settings > Privacy & Security. Without
+it macOS hands over the wallpaper with no windows on it.
+"""
+
+
+def _guide(args: argparse.Namespace) -> int:
+    # First, so a missing PySide6 is reported before anything else is set up.
+    overlay = live.load_overlay()
+    return overlay.run(
+        load_profile(args.profile),
+        _backend(args.backend, args.model),
+        question=args.ask,
+        seconds=args.seconds,
+        refine=not args.no_refine,
+    )
+
+
 def _corpus_fetch(args: argparse.Namespace) -> int:
     for source in corpus.load_sources(args.dir / "sources.toml").values():
         corpus.fetch(source)
@@ -115,6 +141,22 @@ def main(argv: list[str] | None = None) -> int:
     where.add_argument("--out", type=Path, help="save a copy of the screenshot with the control marked")
     _add_model_options(where)
     where.set_defaults(run=_where)
+
+    guide = commands.add_parser(
+        "guide",
+        help="point at the control on your own screen",
+        description=_GUIDE_HELP,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    guide.add_argument("--profile", choices=available_profiles(), required=True)
+    guide.add_argument(
+        "--ask", metavar="QUESTION", help="answer one question, show the outline, then exit"
+    )
+    guide.add_argument(
+        "--seconds", type=float, default=15.0, help="with --ask, how long the outline stays up"
+    )
+    _add_model_options(guide)
+    guide.set_defaults(run=_guide)
 
     corpus_parser = commands.add_parser("corpus", help="manage the local cache of public guides")
     corpus_commands = corpus_parser.add_subparsers(dest="corpus_command", required=True)

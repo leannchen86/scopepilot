@@ -41,6 +41,9 @@ keep it local.
 A case is a hit when the centre of the box scopepilot returns falls inside the
 labelled box. That is the spot a user following the pointer would click.
 
+A case marked `expect = "absent"` asks for a control that is not on that
+screenshot. It is a hit only when scopepilot says so and points at nothing.
+
 ## Reading the score
 
 - **Labels start as `draft`.** A case becomes `verified` only after a person
@@ -81,10 +84,32 @@ What the set needs next: controls that are not on the current screen, icon-only
 buttons with look-alikes, questions with no good answer, and screenshots from a
 layout the notes were not written from.
 
+## Second reading (9 October 2026)
+
+41 of 41 answers were right: 33 of 33 controls on screen were pointed at, and
+8 of 8 controls that were not on screen were reported as not there.
+
+This run used the corrected and expanded layout notes and added 18 harder
+cases: icon-only buttons with a look-alike elsewhere on screen, targets about
+12 pixels across, a similarly named control nearby, and questions whose control
+is not on the screenshot at all.
+
+The limits of the first reading still apply: a stand-in run, draft labels made
+by the same family of model, three guides, and notes written from those same
+guides. Two perfect scores say that finding a control on a clean screenshot of
+a layout the notes describe is no longer the hard part. They say nothing about
+the things public screenshots cannot test:
+
+- whether the written steps are right, which is not scored;
+- a layout, LAS X version or instrument the notes were not written from;
+- a real screen: scaling, several monitors, dialogs in the way;
+- whether the answer arrives fast enough to help someone at the microscope.
+
 ## Adding a case
 
 1. Run `scopepilot corpus fetch` and pick a screenshot from the cache.
 2. Add a `[[case]]` to `lasx/cases.toml` with the box in pixels of that image
-   (`left, top, right, bottom`) and `status = "draft"`.
+   (`left, top, right, bottom`) and `status = "draft"`. For a control that is
+   not on the screenshot, leave the box out and set `expect = "absent"`.
 3. Run `scopepilot eval review --out out/review`, check the red box sits on the
    control, and change the status to `verified`.

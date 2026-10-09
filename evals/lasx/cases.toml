@@ -235,3 +235,205 @@ question = "Where do I go to switch between the colour and the monochrome camera
 control = "'Preferences' link in the camera box (under 'Leica DFC9000 GT VSC-07817 | Default Camera')"
 box = [290, 161, 341, 173]
 status = "draft"
+
+# Harder cases, added after the first set was answered 23 of 23: look-alike
+# icons, small targets, nearby distractors, and questions whose control is not
+# on the screenshot at all (`expect = "absent"`, no box).
+
+[[case]]
+id = "lyon-p031-a"
+source = "lyon-arboretum-seed-guide"
+page = 31
+image = 0
+question = "The live image looks flat and dull - where do I go to change the contrast?"
+control = "Histogram button: 2nd of the six small icon buttons under the Standard tab of the Image panel (opens the histogram used to set contrast)"
+box = [92, 85, 121, 101]
+kind = "icon-only small target in a row of six look-alike icon buttons; question phrased by goal (contrast) not by label (histogram); Exposure and Gain sliders just below and the gradient-square (shading) icon two buttons to the right are distractors"
+status = "draft"
+
+[[case]]
+id = "lyon-p031-b"
+source = "lyon-arboretum-seed-guide"
+page = 31
+image = 0
+question = "I'm switching to a new seed - which trash-bin button clears the old Begin and End focus positions of the z-stack?"
+control = "The trash-bin (reset Begin/End) button of the Z-Stack panel. It sits in the row under the Begin/End buttons, which only appear once the Custom mode is selected; here the Z-Stack panel shows only the three unselected mode buttons (Custom, Symmetric, Start up)."
+expect = "absent"
+kind = "not on screen, with a tempting look-alike: the only trash-bin icon visible is the one in the top toolbar next to the annotation buttons (about x 391-418, y 33-53), which deletes annotations; the Z-Stack panel is open but shows only its mode buttons"
+status = "draft"
+
+[[case]]
+id = "lyon-p014-c"
+source = "lyon-arboretum-seed-guide"
+page = 14
+image = 0
+question = "My stacked images come out soft and I was told to check the iris diaphragm is fully open - which of these buttons gets me to the zoom and iris settings?"
+control = "Magnification tab: 4th icon (cylinder/objective) in the vertical tab strip at the top left"
+box = [9, 194, 60, 244]
+kind = "icon-only tab with no text; look-alike distractors elsewhere: the magnifier zoom-in/zoom-out/1:1 viewer buttons in the top-right toolbar and the magnifier '156X' readout at the bottom right; question phrased by goal"
+status = "draft"
+
+[[case]]
+id = "lyon-p036-c"
+source = "lyon-arboretum-seed-guide"
+page = 36
+image = 1
+question = "Where do I choose which of my LAS X project folders the imported copy of this photo gets saved into?"
+control = "The 'Browse For Folder' window (folder tree with OK / Make New Folder) that appears after clicking Import in the Image Importer window. This screenshot is the earlier Windows 'Open' file dialog, which only picks the source photo."
+expect = "absent"
+kind = "not on screen, with tempting wrong answers: this dialog's own folder path bar, folder tree and 'New folder' button, which choose where the source file is read from, not where the import is saved"
+status = "draft"
+
+[[case]]
+id = "lyon-p037-d"
+source = "lyon-arboretum-seed-guide"
+page = 37
+image = 0
+question = "I'm moving on to a different seed - how do I clear the old Begin and End focus positions so I can set new ones?"
+control = "Trash-bin (reset Begin/End) button in the Z-Stack panel, in the row under the Begin and End buttons"
+box = [69, 728, 90, 746]
+kind = "small icon-only target with two look-alike trash-bin icons elsewhere on screen (top toolbar next to the annotation buttons, and the delete-settings bin in the Recalibrate Image dialog); question phrased by goal"
+status = "draft"
+
+[[case]]
+id = "lyon-p037-e"
+source = "lyon-arboretum-seed-guide"
+page = 37
+image = 0
+question = "The picture is too bright - which slider here turns down the microscope's main (HDI) light?"
+control = "The HDI Light intensity slider in the Illumination panel (Illumination tab), which is not open here; only the Image panel (Standard) and the Z-Stack panel are open."
+expect = "absent"
+kind = "not on screen, with tempting similar controls: the Exposure [ms] and Gain sliders in the open Image panel, which are camera settings rather than light intensity"
+status = "draft"
+
+[[case]]
+id = "lyon-p038-d"
+source = "lyon-arboretum-seed-guide"
+page = 38
+image = 1
+question = "I know the seed in this photo is 14.5 mm across - which box on this screen do I type that real length in millimetres into?"
+control = "The 'New Length (mm)' field of the Recalibrate Image window, which opens after clicking 'Measured' in the small pixel-size box. It is not open on this screenshot."
+expect = "absent"
+kind = "not on screen, with tempting similar fields: XPixelLength and YPixelLength in the small pixel-size box, which take micrometres per pixel, not a measured length in mm"
+status = "draft"
+
+[[case]]
+id = "lyon-p039-c"
+source = "lyon-arboretum-seed-guide"
+page = 39
+image = 1
+question = "The scale bar is sitting in the bottom-left corner of the image - how do I move it to the bottom-right corner instead?"
+control = "Bottom-right arrow button in the 3x3 'Position' grid of the Scalebar Properties panel"
+box = [178, 144, 190, 157]
+kind = "very small icon-only target (about 12 x 13 px) among eight near-identical arrow buttons; the currently selected bottom-left arrow is highlighted red and is a tempting wrong answer; panel is drawn semi-transparently over the Image panel, adding clutter"
+status = "draft"
+
+[[case]]
+id = "ieo-p003-a"
+source = "ieo-histo-fluo"
+page = 3
+image = 0
+question = "I don't need the YFP channel that's currently selected for this experiment - how do I drop it from the channel list?"
+control = "The minus (-) button directly under the channel grid (left half of the -/+ pair) that removes the selected channel"
+box = [629, 327, 680, 345]
+kind = "icon-only small target; look-alike distractors: the adjacent '+' button and the trash-can icon next to 'User Settings' (which deletes a saved setting, not a channel)"
+status = "draft"
+
+[[case]]
+id = "ieo-p002-d"
+source = "ieo-histo-fluo"
+page = 2
+image = 2
+question = "Before I white balance I need to mark out an empty patch of the slide - which button in the toolbar above the image lets me draw that box?"
+control = "Rectangle (ROI) icon button in the toolbar above the image viewer, between the scale-bar icon and the check-mark icon"
+box = [906, 29, 924, 43]
+kind = "icon-only small target (18 x 14 px), goal-phrased; neighbouring icon-only buttons are distractors (check-mark button also shown red, Annotations, pencil, trash, scale bar)"
+status = "draft"
+
+[[case]]
+id = "ieo-p005-c"
+source = "ieo-histo-fluo"
+page = 5
+image = 0
+question = "I want to tile-scan a rectangular block of the tissue - which tool do I pick to draw that region on the map?"
+control = "Rectangle shape tool in the bottom toolbar of LAS X Navigator (4th icon after the pointer, '+', and polygon)"
+box = [694, 714, 716, 733]
+kind = "icon-only small target in a row of similar shape tools (polygon, ellipse, circle, wand); look-alike rectangle glyphs elsewhere (dashed-frame and square buttons in the top-left toolbar, rectangle glyph in the Task List row)"
+status = "draft"
+
+[[case]]
+id = "ieo-p005-d"
+source = "ieo-histo-fluo"
+page = 5
+image = 1
+question = "I'm finished with the overview map - how do I get back to the normal LAS X acquisition screen without quitting the software?"
+control = "'Close' button at the top right of the Navigator, just below the window controls"
+box = [1317, 23, 1371, 38]
+kind = "nearby distractor: the window 'X' directly above it; the red 'Acquisition' tab at top-left sounds like the destination but is the Navigator's own tab"
+status = "draft"
+
+[[case]]
+id = "tamu-p010-a"
+source = "tamu-dm6b-guide"
+page = 10
+image = 2
+question = "I need exactly 0.5 um between slices instead of the spacing the software picks - where do I switch to entering my own value?"
+control = "'Z-Step Size' option row (radio button, label and its value field) in the Z-Stack panel"
+box = [113, 420, 404, 441]
+kind = "nearby distractor with a similar name: the 'Z-Size [um]' field (total stack thickness, 7.00) and the 'Number of Steps' row directly above; goal-phrased; the author's green '3' arrow points at a different row (System Optimized)"
+status = "draft"
+
+[[case]]
+id = "ieo-p003-b"
+source = "ieo-histo-fluo"
+page = 3
+image = 2
+question = "Where in this window do I record the blank reference images that the shading correction is calculated from?"
+control = "'Wizard' tab of the Linked Shading window"
+box = [424, 39, 806, 66]
+kind = "goal-phrased; tempting distractor is the 'Activate Linked Shading Correction for acquired images' checkbox on the open Settings tab"
+status = "draft"
+
+[[case]]
+id = "ieo-p003-c"
+source = "ieo-histo-fluo"
+page = 3
+image = 2
+question = "Where do I run the white balance for the colour camera from here?"
+control = "White Balance command: lives in the image viewer, not in this Linked Shading window. Click the rectangle icon in the toolbar above the image, draw a box on an empty region, then choose 'White Balance' from the menu that appears."
+expect = "absent"
+kind = "not on screen; tempting wrong answer: the 'Activate Linked Shading Correction ...' checkboxes (a different correction)"
+status = "draft"
+
+[[case]]
+id = "tamu-p003-a"
+source = "tamu-dm6b-guide"
+page = 3
+image = 1
+question = "The signal is weak so I want 2x2 binning - where do I change it from 'No Binning'?"
+control = "Binning is set with the 'Image Format' drop-down in the Image section of the Acquisition tab (left side of the main LAS X window), not in Camera Preferences."
+expect = "absent"
+kind = "not on screen; tempting wrong answer: the read-only status text 'Binning Mode: No Binning  Image Format: 2048 * 2048 px' at the bottom of the dialog"
+status = "draft"
+
+[[case]]
+id = "tamu-p010-b"
+source = "tamu-dm6b-guide"
+page = 10
+image = 2
+question = "Begin and End are both set now - which button actually runs the z-stack acquisition?"
+control = "The 'Start' button in the bottom-right corner of the main LAS X window (acquisition button bar), which is outside this Z-Stack panel crop."
+expect = "absent"
+kind = "not on screen; tempting wrong answer: the red 'Begin' button (it only stores the start focus position), also Re-Center and the Stack Direction arrows"
+status = "draft"
+
+[[case]]
+id = "tamu-p011-a"
+source = "tamu-dm6b-guide"
+page = 11
+image = 1
+question = "I'd like to draw another box over a cleaner blank area before white balancing - where do I pick the rectangle drawing tool?"
+control = "The Rectangle ROI tool is in the toolbar along the top of the image display panel, which is not included in this crop of the image area."
+expect = "absent"
+kind = "not on screen; tempting wrong answers: the 'Create acquisition ROI' menu entry and the existing green ROI.01 box"
+status = "draft"

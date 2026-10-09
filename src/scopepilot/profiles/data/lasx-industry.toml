@@ -10,12 +10,16 @@
 #           manual; named here, not copied)
 #
 # Positions marked lyon are partly read from that guide's screenshots as well
-# as its text.
+# as its text. Notes marked mill come from that guide's text only; its figures
+# were not read, so a mill note gives a position only where the text does. The
+# mill text was read through a summarising web fetch, so names quoted from it
+# are as relayed and may not match the screen letter for letter.
 #
-# Status: unverified on a live system. Neither facility guide states its LAS X
-# version, and nothing here has been checked against LAS X 5.x. Notes that
-# apply to one instrument say so in the text, because only the text reaches
-# the model.
+# Status: unverified on a live system. The start-up dialogs pictured in the
+# lyon guide show LAS X 5.1.0.25593; the mill guide does not state its version.
+# Notes that are known from one instrument only say so in the text, because
+# only the text reaches the model. Facility logistics and facility default
+# values are left out on purpose.
 
 name = "Leica LAS X (Industry layout)"
 summary = """
@@ -27,83 +31,217 @@ and often have no text label.
 """
 
 layout = [
-    "The screen is divided into an image area, a left toolbar, a work space, a right toolbar and a status bar. (dvm6)",
-    "A workflow bar at the very top shows Configuration and Acquire; imaging is done with Acquire selected. (lyon)",
-    "A column of six icon boxes runs down the left edge, starting at the top left under the workflow bar. From top to bottom they open the Explorer, Image, Illumination, Magnification, Z-stack and Autofocus panels; the chosen panel opens just to the right of the column. (lyon)",
-    "The acquisition buttons are a row along the bottom left: Software Autofocus, Live Image, Single Capture and the Z-stack start button. (lyon)",
-    "On an M205 C, annotation, scale-bar and overlay settings are a row of three small boxes at the top left of the screen, in the strip above the image, not in the left panel. (lyon)",
-    "On a DVM6 the measurement and label tools and the scale display are on the right toolbar, whose buttons slide out when the mouse reaches the right edge of the screen. (dvm6)",
+    "The Leica DVM6 manual divides the screen into an image area, a left toolbar, a work space, a right toolbar and a status bar. (dvm6)",
+    "A workflow bar at the very top shows Configuration and Acquire. The M205 C guide does not mention it; in its screenshots Acquire is always the highlighted one. (lyon)",
+    "On the M205 C in the guide, a column of six icon boxes runs down the left edge, starting at the top left under the workflow bar. From top to bottom they open the Explorer, Image, Illumination, Magnification, Z-stack and Autofocus panels. In that guide's screenshots the Image and Z-stack panels open just to the right of the column, while the Explorer panel sits against the right edge of the screen. (lyon)",
+    "The Image panel, as shown for an M205 C with a K3C camera, has a Standard and an Advanced tab. Under Standard is a row of six small symbols, in this order: Auto-Exposure, Histogram, Show/Hide Preview, Color controls, shading correction, camera preferences. Below the row are Image Size, Exposure, Gain, the 'Color mode' / 'Black and White mode' choice and the 'Camera Profile' drop-down. (lyon)",
+    "On an M205 C the acquisition buttons are a row along the bottom left: Software Autofocus, Live Image, Single Capture and the Z-stack start button. (lyon)",
+    "On an M205 C, annotation, scale-bar and overlay settings are a row of three small boxes at the top left of the screen, in the strip above the image, not in the left panel. In order they are Annotation Tools, Scale Bar Properties and Show or Hide Individual Overlays. The right end of the same strip holds magnifier buttons and a zoom percentage. (lyon)",
+    "In the M205 C guide's screenshots the bar along the bottom, right of the acquisition buttons, shows the image name, its size in pixels and the cursor position; its right end shows a magnification figure and the Z position. The guide's text does not describe this bar. (lyon)",
+    "In the M205 C guide, most tool windows have a small red 'i' at their top right corner that opens the help page for that tool. (lyon)",
+    "On a DVM6 the measurement and label tools and the scale display are on the right toolbar, whose buttons slide out when the mouse reaches the edge of the screen. (dvm6)",
+    "On a DVM6 the facility guide names a bottom toolbar with Live Image (a play symbol, at the bottom left), capture, Z-Stack, a Stage icon and a 2D button; a left menu with an image icon; a clock (time-lapse) option on the left-hand side; and a right-side toolbar with the stamp button at its top and a 3D model button. (mill)",
 ]
 
 [[control]]
+task = "Answer the prompts when LAS X starts"
+where = "These are dialogs, not panels. On an M205 C: leave the options in the Configuration prompt unchanged and continue, then answer the 'Z-Drive' prompt No unless the clamps limiting the focus column's travel were moved. On a DVM6: accept the stage initialisation and Z-drive prompts, otherwise the Stage menu and Tile Scan will be missing."
+source = "lyon, mill"
+
+[[control]]
 task = "Start or stop the live image"
-where = "Live Image button in the bottom-left button row."
-source = "lyon"
+where = "Live Image button in the bottom-left button row. On a DVM6 the screen is grey after start-up until this button (a play symbol) is pressed."
+source = "lyon, mill"
 
 [[control]]
 task = "Capture a single image"
-where = "Single Capture button in the bottom-left button row, next to Live Image."
-source = "lyon"
+where = "Single Capture button in the bottom-left button row, next to Live Image; overlays that are switched on are stamped into it. On a DVM6 it is the capture button on the bottom toolbar."
+source = "lyon, mill"
 
 [[control]]
 task = "Autofocus"
-where = "Software Autofocus button, first in the bottom-left button row, runs it. The Autofocus icon box in the left column, which carries a similar icon, only opens its settings."
+where = "On an M205 C the first button in the bottom-left button row is Software Autofocus. The Autofocus icon box in the left column, which carries a similar icon in the guide's screenshots, opens the panel where autofocus is adjusted instead. On a DVM6, left-click and drag on the live image and pick the auto-focus entry in the menu that appears to focus on that area."
+source = "lyon, mill"
+
+[[control]]
+task = "Fine focus from the software"
+where = "On an M205 C, a short column of small up and down arrows at the bottom-left corner of the image area makes very small focus moves; coarser focus is the handwheel on the instrument. On a DVM6 the guide focuses with the wheels on the instrument."
+source = "lyon, mill"
+
+[[control]]
+task = "Choose where images are saved"
+where = "Explorer icon box in the left column. On a DVM6: select the folder in the Explorer tree, then press 'Set Acquisition Folder' near the top of the Explorer (a red folder icon with a red circle); 'Add New Folder' (a folder icon with a plus) is also near the top. On an M205 C, starting a Z-stack asks for the folder to save into."
+source = "lyon, mill"
+
+[[control]]
+task = "File format of saved images"
+where = "Explorer panel, 'Acquisition format' drop-down at the very bottom of the panel (M205 C guide)."
 source = "lyon"
 
 [[control]]
-task = "Choose where images are saved and their file format"
-where = "Explorer icon box in the left column; the format is the 'Acquisition format' drop-down in the Explorer."
+task = "Open an earlier image or a finished Z-stack"
+where = "Explorer panel: browse the folder tree and click the image. A Z-stack is saved as a folder; the combined image inside it is called 'Multifocus Image - 1'."
+source = "lyon, mill"
+
+[[control]]
+task = "Rename, delete or organise images and folders"
+where = "Explorer panel: right-click the image or folder. On a folder the menu offers Delete, Rename, 'Open file location', 'Open folder location', 'Import from folder location' and 'Create new sub folder'. The M205 C guide says to rename, move and delete only inside LAS X; the DVM6 guide traces load errors to doing it in Windows."
+source = "lyon, mill"
+
+[[control]]
+task = "Export an image as a file outside LAS X"
+where = "On a DVM6: right-click the image in the acquisition file list and choose 'export image'. The M205 C guide does not describe exporting; it only sets the acquisition format."
+source = "mill"
+
+[[control]]
+task = "Bring in a photo from another camera and calibrate it"
+where = "On an M205 C: Explorer, right-click a folder -> 'Import from folder location' -> pick the file -> in the Image Importer window press 'Calibrate', then 'Measured'. In the 'Recalibrate Image' dialog drag the red bar onto a feature of known size, type that size as the new length, press 'Apply' and close the dialog; then press 'Import' and choose the destination. The guide hides the scale bar and annotations while calibrating, since they are not yet correct."
 source = "lyon"
 
 [[control]]
 task = "Exposure, gain and colour mode"
-where = "Image icon box in the left column. A 'Camera Profile' drop-down in the same panel recalls saved settings."
+where = "Image icon box in the left column, Standard tab: Exposure and Gain sliders, and under them the choice between 'Color mode' and 'Black and White mode'."
+source = "lyon, mill"
+
+[[control]]
+task = "Auto-exposure"
+where = "Image panel, Standard tab: the first symbol in the row of six. Brightness can be adjusted once it is on. The M205 C guide finds it works best on a white background and sets exposure by hand on a dark one."
+source = "lyon, mill"
+
+[[control]]
+task = "Contrast and the histogram"
+where = "Image panel, Standard tab: the second symbol in the row opens the Histogram, with a horizontal and a vertical slider. The M205 C guide uses only the vertical slider because the horizontal one seemed to cause a software fault when taking images."
+source = "lyon"
+
+[[control]]
+task = "Colour tone, saturation and white balance"
+where = "Image panel, Standard tab: the Color controls symbol, fourth in the row (M205 C guide). It has a colour wheel, a saturation setting and a white balance button; for white balance put plain white paper under the objective, then press the button. On a DVM6 the facility guide resets the RGB values in Color Controls."
+source = "lyon, mill"
+
+[[control]]
+task = "Image size or resolution"
+where = "Image panel, Standard tab: the 'Image Size' drop-down above the Exposure slider. This is read from the M205 C guide's screenshots; its text does not explain the drop-down."
+source = "lyon"
+
+[[control]]
+task = "Shading correction and camera preferences"
+where = "Image panel, Standard tab: the last two symbols in the row. The fifth corrects shading at the edge of the field. The sixth opens the 'Camera Preferences' window, which holds a Calibration button, image flip, digitisation bit depth, the C-mount adapter value and the tick box that enables camera profiles (seen with a K3C camera)."
+source = "lyon"
+
+[[control]]
+task = "Save or recall a set of camera settings"
+where = "Image panel, 'Camera Profile' drop-down (M205 C guide). To save: open the drop-down, type a name, then right-click it and choose Save. Saved profiles are then listed in the drop-down."
 source = "lyon"
 
 [[control]]
 task = "HDR, averaging, sharpening, colour temperature"
-where = "Image icon box in the left column, then its Advanced tab."
+where = "Image icon box in the left column, then its Advanced tab. Switching HDR on starts it in Automatic mode; untick Automatic to set Brightness and Range by hand. The M205 C guide says the HDR effect is not visible until a Z-stack is started."
 source = "lyon"
 
 [[control]]
 task = "Lamp or ring-light brightness"
-where = "Illumination icon box in the left column; brightness is set with sliders. On a DVM6 a 'Scene' drop-down picks a lighting preset."
+where = "Illumination icon box in the left column; brightness is set with sliders, one per light source (on the M205 C described, 'SLI Light' for the goosenecks and 'HDI Light' for the main light). On a DVM6 the facility guide picks a ring-light preset from a 'Scene' drop-down but does not say which panel that is in, nor where the coaxial light or stage backlight are switched."
 source = "lyon, mill"
 
 [[control]]
 task = "Zoom and iris"
-where = "Magnification icon box in the left column."
-source = "lyon"
-
-[[control]]
-task = "Set up a Z-stack"
-where = "Z-stack icon box in the left column. Modes are Custom, Symmetric and Start up; set Begin and End, or use System Optimized for the step count. Run it with the Z-stack start button in the bottom-left row."
-source = "lyon"
-
-[[control]]
-task = "Extended depth of field (all-in-focus image) from a Z-stack"
-where = "The 'Calculate extended depth of field image' ON/OFF switch at the bottom of the Z-stack panel. Switch it on before running the stack. On a DVM6 the result is saved as a Multifocus Image, opened from the Explorer."
+where = "On an M205 C: Magnification icon box in the left column. On a DVM6 the facility guide changes magnification with the large red ring on the instrument and names no software control for it."
 source = "lyon, mill"
 
 [[control]]
+task = "Tell LAS X that the objective was changed"
+where = "The M205 C guide says LAS X has to be updated after swapping objectives but does not say where. Say that, and do not guess a control."
+source = "lyon"
+
+[[control]]
+task = "Zoom the picture on screen"
+where = "Magnifier buttons and a zoom percentage at the right end of the strip above the image (M205 C screenshots; the guide does not explain each button). While drawing a measurement, holding the spacebar zooms in. On a DVM6 the mouse scroll wheel zooms digitally, which adds no resolution."
+source = "lyon, mill"
+
+[[control]]
+task = "Set up a Z-stack"
+where = "Z-stack icon box in the left column. Modes are Custom, Symmetric and Start up. In Custom, as the M205 C guide does it: focus just past one end of the specimen and press Begin, focus through to just past the other end and press End, then pick the step setting. Run it with the Z-stack start button, the one with three stacked squares at the right of the bottom-left row. On a DVM6, close the Z-stack menu first, then press Z-Stack on the bottom toolbar."
+source = "lyon, mill"
+
+[[control]]
+task = "Z-stack with the Start up method"
+where = "On a DVM6: Z-stack menu -> 'Start Up' -> switch on the extended depth of field option and set the maximum number of steps -> close the menu -> focus on the lowest point of the sample -> press Z-Stack on the bottom toolbar, and stop the run once the highest point has just gone out of focus."
+source = "mill"
+
+[[control]]
+task = "Number of Z-steps"
+where = "Bottom of the Z-stack panel (M205 C guide): three options, 'Number of Steps', 'Z-Step Size' and 'System Optimized'. System Optimized picks the count from the Begin-End range; choose Number of Steps to set it by hand."
+source = "lyon"
+
+[[control]]
+task = "Clear the Z-stack range and start again"
+where = "Trash bin button in the Z-stack panel; in the M205 C guide's screenshot it is in the row of small buttons under Begin and End. The guides clear it when moving to a new specimen or a different framing, or when an old range is still shown."
+source = "lyon, mill"
+
+[[control]]
+task = "Extended depth of field (all-in-focus image) from a Z-stack"
+where = "The 'Calculate extended depth of field image' ON/OFF switch near the bottom of the Z-stack panel (position and label from the M205 C guide's screenshots; its text does not mention the switch). The DVM6 guide switches it on before running the stack. Both guides then open a Multifocus Image from the stack's folder in the Explorer; that this image is what the switch produces is our reading, not stated by either."
+source = "lyon, mill"
+
+[[control]]
+task = "3D view of a Z-stack"
+where = "On a DVM6: open the Multifocus Image from the Explorer, then press the 3D model button on the right-side toolbar. Its measurement tab adds step heights, volumes and profiles. The 2D button on the bottom toolbar returns to the flat view. If the 3D surface comes out almost flat, the guide's remedy is on the instrument: change or reseat the objective."
+source = "mill"
+
+[[control]]
+task = "Move to another part of the sample"
+where = "On a DVM6: click 'Stage'; its Overview shows a grid on which a grey rectangle marks the area now in view, and clicking elsewhere on the grid drives there. On an M205 C the gliding stage is moved by hand."
+source = "mill, lyon"
+
+[[control]]
 task = "Tile scan or stitching"
-where = "On a DVM6 both are in the Stage menu. Tilescan: mark positions on the overview grid, then start the experiment; Merge Images stitches the tiles. To stitch the whole sample, choose Spiral in the Stage menu, close the menu, then press the Stage button on the bottom toolbar to run it."
+where = "On a DVM6. Tilescan: click 'Stage', mark positions on the Overview grid in the order wanted with the leftmost button just beneath the grid, then start the experiment; switching on Merge Images stitches the tiles. To stitch the whole sample, choose Spiral in the Stage menu, close the menu, then press the Stage icon on the bottom toolbar to run it."
 source = "mill"
 
 [[control]]
 task = "Draw annotations on the image"
-where = "Annotation Tools: the leftmost of three small boxes at the top left of the screen, in the strip above the image (M205 C). On a DVM6 the measurement and label tools are on the right-side toolbar."
+where = "Annotation Tools: the leftmost of three small boxes at the top left of the screen, in the strip above the image (M205 C). Its window has a row of five tools, a second row that includes undo, redo and a trash button, and Properties, Configuration and Templates sections; Properties sets line colour and thickness and label font and colours. On a DVM6 the measurement and label tools are on the right-side toolbar."
 source = "lyon, dvm6"
+
+[[control]]
+task = "Measure a distance"
+where = "On an M205 C: Annotation Tools -> second tool from the left, then drag a line across the feature; its length is written beside it. On a DVM6 the facility guide names a 'distance to distance' button under its overlays heading, and puts the overlay menu at the top left of 'the toolbar' without saying which toolbar."
+source = "lyon, mill"
+
+[[control]]
+task = "Add an arrow or a text label"
+where = "On an M205 C: Annotation Tools -> fourth tool (a diagonal arrow), then click and drag; the label box appears where the drag started, and double-clicking the box lets you type in it."
+source = "lyon"
+
+[[control]]
+task = "Delete a measurement or annotation"
+where = "On an M205 C: Annotation Tools -> Selection tool (the leftmost), click the item, then the trash button in the same window."
+source = "lyon"
 
 [[control]]
 task = "Show or change the scale bar"
-where = "Scale Bar Properties: immediately right of Annotation Tools in the same row of small boxes; 'Adaptive Mode' is at the top left of that dialog (M205 C). On a DVM6 the scale is switched on with a button on the right-side toolbar."
+where = "Scale Bar Properties: immediately right of Annotation Tools in the same row of small boxes (M205 C). The 'Mode' drop-down is at the top left of that dialog, and the guide recommends setting it to Adaptive; the dialog also sets size, thickness, foreground and background colour, position and style. On a DVM6 the scale is switched on with a button on the right-side toolbar."
 source = "lyon, dvm6"
 
 [[control]]
+task = "Show or hide overlays on the image"
+where = "'Show or Hide Individual Overlays': the third of the three small boxes at the top left (M205 C). It opens a small window of buttons; a red eye on a button (annotations and scale bar in the guide's example) means that overlay is drawn over the image, and clicking the button turns it off."
+source = "lyon"
+
+[[control]]
 task = "Burn annotations and scale bar into the saved image"
-where = "Turn on the stamp symbol in the 'Show or Hide Individual Overlays' window, opened from a button at the top left near the Annotation Tools. A stamp button then appears in the bottom-left button row; it is not shown while Live Image is running. Clicking it on a selected image saves a new copy with '_Overlay' in its name. On a DVM6 the stamp button is at the top of the right toolbar."
+where = "On an M205 C: turn on the stamp symbol in the 'Show or Hide Individual Overlays' window, opened from the third small box at the top left. A stamp button then appears in the bottom-left button row; it is not shown while Live Image is running. Clicking it on a selected image saves a new copy with '_Overlay' in its name. On a DVM6 the stamp button is at the top of the right toolbar, and overlays are saved when the capture button shows a stamp."
 source = "lyon, mill"
+
+[[control]]
+task = "Help on what a tool does"
+where = "The small red 'i' at the top right corner of the tool's window opens that tool's page in the LAS X help, which can also be searched (M205 C guide)."
+source = "lyon"
+
+[[control]]
+task = "Reduce the pixel count of a saved image (Pixelization)"
+where = "On a DVM6 this is in the Process tab; the guide does not say where that tab is. There: select your folder and press 'Set Acquisition Folder', open the image, set 'X/Y: Every' with its arrows (1 keeps every pixel, 2 every second, and so on), press 'Set Start', then apply. The new image appears in the acquisition folder."
+source = "mill"
 
 [[trap]]
 symptom = "The Stage menu, navigation arrows or Tile Scan are missing"
@@ -111,21 +249,56 @@ advice = "On a DVM6 the facility guide gives the cause: the stage initialisation
 source = "mill"
 
 [[trap]]
-symptom = "Time lapse is greyed out"
-advice = "On a DVM6 the facility guide says this control opens differently from the others: click and hold the time-lapse option until the ring around it completes, and click and hold again to switch it off. Point at the time-lapse control and say to click and hold."
+symptom = "Time lapse options are greyed out"
+advice = "On a DVM6 the facility guide says an ordinary click on the time-lapse option, a clock on the left-hand side, leaves its options greyed out, and that this control opens differently from the others: click and hold the time-lapse option until the ring around it completes, and click and hold again to switch it off. Point at the time-lapse control and say to click and hold."
 source = "mill"
 
 [[trap]]
 symptom = "The live image is black"
-advice = "On a DVM6 the facility guide says this is not a fault but image settings that have drifted far off, and that restarting will not help. Its fix is in the Image panel: put exposure, gain and colour mode back to the facility's usual values, reset the colour controls, then reset the LUT and the gamma from the bar under the histogram. Our addition, not from the guide: also check that the illumination is on."
+advice = "On a DVM6 the facility guide says this is not a fault but the result of a drastic change in the image settings, and that restarting will not help. Its fix starts from the image icon in the left menu: open the histogram and put exposure, gain and colour mode back to the facility's usual values; open Color Controls and reset RGB; then right-click the grey bar under the histogram and reset the LUT and the gamma, one after the other. Our addition, not from the guide: also check that the illumination is on."
 source = "mill"
 
 [[trap]]
 symptom = "The scale bar is missing from, or wrong in, a saved image"
-advice = "Overlays are only written into the file when they are switched on in the overlays window and stamping is on. A Z-stack result has to be stamped afterwards with the stamp button. Separately, the scale bar produced after a Z-stack may be inaccurate, so check it against the live image."
+advice = "On an M205 C the guide's route is: overlays go into a capture when they are switched on in the overlays window and the stamp symbol is on, and a finished Z-stack image is stamped afterwards with the stamp button. If the bar is there but cannot be seen after changing between a light and a dark background, change its colours in Scale Bar Properties. Separately, the DVM6 guide warns that the scale bar produced after a Z-stack may be inaccurate, so check it against the live image."
 source = "lyon, mill"
 
 [[trap]]
+symptom = "The finished Z-stack image is not sharp everywhere"
+advice = "The M205 C guide works through these in order: set Begin and End just beyond the specimen on each side, but not so far that the background is picked up; adjust the light; switch Auto-Exposure off and set exposure by hand; raise 'Number of Steps' above what System Optimized chose; raise contrast; try HDR with sharpening; open the iris fully; zoom out a little and set the range again."
+source = "lyon"
+
+[[trap]]
+symptom = "Parts of the image glow or are washed out"
+advice = "The M205 C guide treats this as overexposure: start from a low exposure and raise it slowly, and lower contrast if the image is still too dark at a safe exposure. If it happens in HDR, untick Automatic on the Advanced tab of the Image panel and set the brightness by hand."
+source = "lyon"
+
+[[trap]]
+symptom = "An error about the folder tree, or files that will not load"
+advice = "The DVM6 guide's cause: files were moved or deleted in Windows instead of inside LAS X, which still lists them. Its fix is to delete the broken entries in the LAS X Explorer; if they cannot all be found, copy the files to a new folder in Windows and delete the old folder from within LAS X."
+source = "mill"
+
+[[trap]]
+symptom = "Saved images disappear after LAS X is closed"
+advice = "On a DVM6 the facility guide blames a fault that arrived with a software update: the image looks saved but is not on disk. Its workaround is to right-click the image in the acquisition file list and choose 'export image'. The guide also has a longer-term repair outside LAS X; our addition: leave that to the facility."
+source = "mill"
+
+[[trap]]
+symptom = "LAS X will not open properly or reports a hardware configuration error"
+advice = "On a DVM6 the guide's fix is outside LAS X: cancel the start-up dialogs, open the separate Leica hardware configurator program, press 'Hardware Setup' at its top left, press 'Test', and 'Apply' if the test passes. If a particular message appears (it is shown in a figure we could not read), the guide unplugs and replugs the USB cable at the microscope and the computer and tests again. Mention it and stop."
+source = "mill"
+
+[[trap]]
+symptom = "LAS X will not close fully"
+advice = "The DVM6 guide's fix is outside the software: end the LAS X task in the Windows task manager, make sure the microscope is off, restart the computer, then start and shut down everything once more. Mention it and stop."
+source = "mill"
+
+[[trap]]
+symptom = "The computer crashes or runs out of disk space"
+advice = "The M205 C guide warns that raw images are large, that HDR stacks take more space still, and that a full disk can crash the computer. Delete unneeded images from the Explorer as you go."
+source = "lyon"
+
+[[trap]]
 symptom = "LAS X is slow to start"
-advice = "The guide's fix is to clear LAS X temporary files before opening it. That is outside the software; mention it and stop."
+advice = "The M205 C guide's fix is to delete temporary files before opening LAS X; its screenshot shows a Temp folder on the C: drive, and it does not say which files belong to LAS X. That is outside the software; mention it and stop."
 source = "lyon"

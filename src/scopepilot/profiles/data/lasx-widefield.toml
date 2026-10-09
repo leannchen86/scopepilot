@@ -10,117 +10,292 @@
 #          https://ucldata.atlassian.net/wiki/spaces/LMCBLMic/pages/38012004
 #
 # Positions marked ieo or tamu are partly read from those guides' screenshots
-# as well as their text.
+# as well as their text. A note that says something is "visible" or "not
+# explained" was read from a screenshot only: the guide shows the control but
+# does not describe it. Anything we inferred ourselves says so in its text.
+#
+# `source` is not sent to the model, so the summary below tells it what tamu,
+# ieo and ucl stand for and the notes name the guide where a note holds for one
+# instrument or camera only.
+#
+# The tamu start-up dialog screenshot shows LAS X 3.7.6; ieo and ucl do not
+# state a version.
 #
 # Status: unverified on a live system.
 
 name = "Leica LAS X (Life Science widefield layout)"
 summary = """
 The LAS X edition used with Leica research microscopes such as the DM6 B. It is \
-organised as a workflow across the top (Configuration, Acquire, Process, \
-Quantify). On the Acquire screen, acquisition settings are in a column on the \
-left, the Light Path panel is in the middle and the image is on the right.
+organised as a workflow across the top (Acquire and Process, and on some \
+installations also Quantify and Configuration). On the Acquire screen, acquisition settings are in \
+a column on the left, the Light Path panel is in the middle and the image is on \
+the right. These notes come from three facility guides and layouts differ \
+between them: tamu is a DM6 B with a DFC9000 GT monochrome camera and a DMC4500 \
+colour camera, ieo is a histology and fluorescence stand with a DMC2900 colour \
+camera and an Andor Zyla camera, and ucl is a stand whose objectives are changed \
+by hand. 'Visible' or 'not explained' means a guide's screenshot shows the \
+control but its text does not describe it.
 """
 
 layout = [
-    "Workflow steps run across the top: Configuration, Acquire, Process, Quantify. Imaging is done under Acquire. (tamu)",
+    "Workflow steps run across the top. The tamu screenshot shows five tabs, too small to read with certainty: they look like Configuration, Acquire, Process, Quantify and Analysis, and the guide's text does name a Configuration area. The ieo screenshots show Acquire, Process and Quantify, or only Acquire and Process. Imaging is done under Acquire. (tamu, ieo)",
     "The Acquire screen has three sections side by side: acquisition parameters and file/project settings in a column on the left, the Light Path panel (imaging mode, channel setup, camera selection) in the middle, and the image display on the right. (tamu)",
-    "A bar along the bottom of the Acquire screen holds Autofocus, Live, Single Image, Capture Image and Start. (ieo, tamu)",
-    "Saved images appear in an 'Open projects' list; right-clicking an entry there offers export and 'Apply Image Settings'. (tamu, ucl)",
-    "LAS X Navigator, for overviews and tile scans, is a separate view opened from a button on the Acquire screen. (tamu, ieo)",
+    "The left column has two tabs at its top: 'Open projects' (the list of projects and their images) and 'Acquisition' (the acquisition settings). (tamu, ieo)",
+    "The Acquisition tab is a stack of collapsible sections, top to bottom: Acquisition Mode, Image (camera settings; its title bar shows the current exposure), Illumination settings (tamu only), Magnification (one button per objective; the title is shortened to 'Magn.' in the tamu screenshots), Z-Stack once z is switched on, and Project settings. The tamu screenshot shows a scroll bar on this column when the Z-Stack section is open. (tamu, ieo)",
+    "The Light Path panel, top to bottom: a 'Load/Save single setting' row, the channel boxes (FCr1, FCr2, ...) with '-' and '+' buttons under them, a Lamp box beside a camera box (camera name, then Preferences, Calibration and Linked Shading links), a row of round filter-cube buttons, an objective drop-down and a Specimen icon. The ieo histology screenshot has neither the 'Load/Save single setting' row nor channel boxes; its panel starts at the Lamp and camera boxes. (tamu, ieo)",
+    "The image display has a toolbar above the image (an Annotations button, then icon buttons including a rectangle tool, two magnifiers, a four-arrow icon and a zoom percentage), a column of icon buttons down the left edge of the image with a vertical display-range bar under it, and another column of buttons down the right edge. The guides explain only the rectangle tool, the top-left button, the histogram button and the display-range bar. (tamu, ieo)",
+    "A line under the image gives the image size in pixels and in µm; in the tamu screenshot it also gives the cursor position and intensity. (tamu, ieo)",
+    "A bar along the bottom of the Acquire screen holds Autofocus, Live and Pause on the left, and Single Image, Capture Image and Start further right, under the Light Path panel. (ieo, tamu)",
+    "Acquired images are listed under their project on the 'Open projects' tab; right-clicking an entry there offers save and export (ucl) and 'Apply Image Settings' (tamu). (tamu, ucl, ieo)",
+    "LAS X Navigator, for overviews and tile scans, is a separate view opened from a button in the Acquisition Mode row and left again with its Close button. (tamu, ieo)",
 ]
 
 [[control]]
 task = "Start the live image"
-where = "Live button on the bar along the bottom of the Acquire screen, under the left panel. It reads Stop while live is running."
+where = "Live button on the bar along the bottom of the Acquire screen, under the left panel, next to Autofocus. In some ieo and tamu screenshots the same button reads Stop; that it reads Stop while live is running is our reading, no guide says so."
 source = "ucl, ieo, tamu"
 
 [[control]]
-task = "Capture an image"
-where = "Capture Image button on the same bottom bar, further right, between Single Image and Start."
+task = "Capture an image, or run the whole acquisition"
+where = "Capture Image button on the same bottom bar, further right, between Single Image and Start. ieo describes Single Image as taking just the image on display, Capture Image (in its fluorescence section) as taking the fluorescence-channel image in the selected x,y plane, and Start as running the whole acquisition as set up (our reading: including a z-stack or time lapse that is switched on)."
 source = "ucl, ieo, tamu"
 
 [[control]]
 task = "Tell the software which objective is in use"
-where = "Magnification selector in the Acquire panel. On the system in the guide the turret is turned by hand and this selection only records the objective for the image metadata. A separate 'Magnification Changer' drop-down records whether the 1.0x or 1.5x lens is in the light path. Whether either control moves the hardware on a motorised stand is not covered by any guide we have."
-source = "ucl"
+where = "The Magnification section of the Acquisition tab in the left column, which has one button per objective. On the ucl system the turret is turned by hand and this selection only records the objective for the image metadata; a separate 'Magnification Changer' drop-down records whether the 1.0x or 1.5x lens is in the light path. The Light Path panel also shows the objective in a drop-down above the Specimen icon (visible, not explained). Whether any of these moves the hardware on a motorised stand is not covered by any guide we have."
+source = "ucl, ieo, tamu"
 
 [[control]]
-task = "Pick the imaging mode or fluorescence channel"
-where = "The pull-down inside each channel box at the top of the Light Path panel, the middle section of the Acquire screen. For reflected light on a DM6 B the guide picks 'BF-BF' there, then goes to the Illumination settings panel on the left: select IL, keep its intensity low, and open the IL-Fld field aperture slider far enough to light the whole field."
+task = "Pick the fluorescence channel (dye) or the contrast method"
+where = "Each channel box at the top of the Light Path panel, the middle section of the Acquire screen, has two pull-downs: the upper one picks the dye or channel name (for example DAPI, GFP, Cy3) and the lower one picks the contrast method (FLUO, TL-BF, TL-DIC and BF-BF appear in the guides). In tamu, picking the dye in the upper pull-down names the channel, loads its display colour and switches to the matching filter cube. One channel box is drawn in red in the screenshots; that this marks the active channel is our reading."
+source = "tamu, ieo"
+
+[[control]]
+task = "Add or remove an imaging channel"
+where = "The '-' and '+' buttons just under the channel boxes in the Light Path panel."
+source = "tamu, ieo"
+
+[[control]]
+task = "Switch filter cube"
+where = "The row of round filter-cube buttons in the Light Path panel, below the Lamp and camera boxes. On tamu, clicking one moves the microscope to that cube; tamu says to prefer the dye pull-down in the channel box, which switches the cube and keeps the channel name right."
+source = "tamu"
+
+[[control]]
+task = "Reflected (incident) light imaging"
+where = "On the tamu DM6 B: pick 'BF-BF' in the lower pull-down of the channel box, then go to the Illumination settings section in the left column. Select TL and set its intensity to 0 if only reflected light is wanted, then select IL, keep its intensity low, and open the IL-Fld field aperture far enough to light the whole field."
+source = "tamu"
+
+[[control]]
+task = "Save or load a channel setup (preset)"
+where = "The 'Load/Save single setting' row at the top of the Light Path panel: the drop-down lists user-defined and Leica-standard presets, and the disk icon to its right saves the current imaging settings as a user preset. A bin icon and a curved-arrow icon sit beside it (visible, not explained)."
+source = "tamu"
+
+[[control]]
+task = "Exposure time"
+where = "The 'Exposure [ms]' slider and number box in the Image section of the Acquisition tab, left column."
+source = "ieo, tamu"
+
+[[control]]
+task = "Camera gain"
+where = "In the Image section, under Exposure. With a colour camera it is a Gain slider; tamu notes that more gain gives a brighter but noisier image. With tamu's monochrome DFC9000 GT and ieo's Andor Zyla fluorescence camera the screenshots show a 'Gain List' drop-down instead; on the tamu DFC9000 GT, 'Low noise' is the more sensitive mode, for ordinary and weak fluorescence, and 'High Well Capacity' is a lower-gain mode for very high-contrast objects that needs longer exposure or more light."
+source = "tamu, ieo"
+
+[[control]]
+task = "Binning or image resolution"
+where = "The 'Image Format' drop-down in the Image section of the Acquisition tab. With a colour camera a second 'Live Format' drop-down sets the binning of the live view separately. tamu notes that binning cuts data size and raises sensitivity at the cost of spatial resolution."
+source = "tamu, ieo"
+
+[[control]]
+task = "Colour or black-and-white capture (colour camera)"
+where = "The 'Color mode' and 'Black and White mode' radio buttons in the Image section, under Gain. ucl advises black-and-white mode for fluorescence on its system, with channels merged afterwards in post-processing."
+source = "ucl, ieo, tamu"
+
+[[control]]
+task = "Illumination intensity"
+where = "The Intensity slider in the left column below the camera settings: inside the 'Illumination settings' section on tamu, and under a Standard/Advanced switch on ieo. On ieo the fluorescence intensity slider is labelled FIM."
+source = "tamu, ieo"
+
+[[control]]
+task = "Condenser aperture, field diaphragm, transmitted or incident light"
+where = "On the tamu DM6 B, the 'Illumination settings' section of the Acquisition tab: Aperture and 'TL - Fld' sliders under Intensity, and TL and IL buttons (in its reflected-light recipe tamu selects one of them before setting its intensity). tamu says to recheck the condenser aperture after changing objective."
 source = "tamu"
 
 [[control]]
 task = "White balance"
-where = "Draw a Rectangle ROI on an empty area of the image, then press White Balance."
-source = "tamu, ucl"
+where = "Pick the rectangle tool in the toolbar above the image and draw a box on an empty area of the image (ieo: move the stage to find one if needed). A small menu appears when the mouse is released; choose 'White balance' in it. For colour cameras."
+source = "tamu, ucl, ieo"
 
 [[control]]
 task = "See over- and under-exposed pixels"
-where = "The 'Glow Over Under' button, described as the top-left button of the image display panel."
+where = "The top button of the icon column on the left edge of the image. tamu says it cycles through the colour image, a monochrome image and an over/under view in which saturated pixels are red (or blue) and zero-intensity pixels are blue (or green in some modes). ucl has a 'Glow Over Under' button that shows too-bright pixels in red and is clicked again to return to the normal view; ucl gives no position for it, and that it is this same button is our reading."
 source = "ucl, tamu"
 
 [[control]]
-task = "Camera choice and bit depth"
-where = "Preferences: 'Set Camera To' picks the camera and 'Set Digitization to' picks the bit depth. Camera Preferences is also reachable from the camera box in the Light Path panel."
+task = "Show the histogram"
+where = "A button with a histogram icon near the bottom of the icon column on the left edge of the image. The ieo screenshot has two look-alike histogram icons at the bottom of that column and the guide circles the upper one; the tamu screenshots show one, at the very bottom. The histogram then opens below the image, with Log and Reset buttons and a Gamma slider (visible, not explained). ieo adjusts exposure time and light intensity until the histogram starts near 0 and stops a little short of the maximum."
+source = "ieo"
+
+[[control]]
+task = "Brightness and contrast of the displayed image"
+where = "The vertical bar on the left side of the image, under the icon column: drag its minimum and maximum tags. ieo also names an Autoscaling button that sets display brightness and contrast automatically, but does not show where it is."
+source = "ieo"
+
+[[control]]
+task = "Zoom the displayed image"
+where = "Not explained in any guide. Visible in the toolbar above the image: two magnifier icons, then a four-arrow icon and a zoom percentage. Reading the four-arrow icon as fit-to-window is our guess."
 source = "ieo, tamu"
 
 [[control]]
-task = "Shading correction"
-where = "Linked Shading, in the camera box of the Light Path panel."
+task = "Camera choice, bit depth and read-out speed"
+where = "Click the Preferences link in the camera box of the Light Path panel to open the Camera Preferences window. There 'Set Camera to' picks the camera, 'Set Digitization to' picks the bit depth, and 'Quality Mode' sets the read-out speed (tamu keeps its DFC9000 GT on 'Low Noise' unless fast video is needed)."
+source = "ieo, tamu"
+
+[[control]]
+task = "Shading (flat-field) correction"
+where = "Click Linked Shading in the camera box of the Light Path panel. The Linked Shading window has a Settings tab with tick boxes that switch the correction on for acquired images and for the live image, and a Wizard tab for recording the reference images, which ieo recommends doing. ieo says the button turns green when the correction is active; the square beside the Linked Shading link is green in some tamu screenshots. ieo also circles a square icon in the icon row of the Image section, which we read as a second way to open the same window (our reading)."
 source = "tamu, ieo"
 
 [[control]]
 task = "File naming and autosave"
-where = "The File/Project Settings tab in the left column."
+where = "The 'Project settings' section at the bottom of the left column; tamu shows it open at the bottom of the Open projects tab. The round button beside 'Default settings for new projects' is where tamu sets the default project name and automatic saving after each capture, and the 'User defined image name' tick box with its text field sets the name given to captured images. In the ieo screenshots a collapsed Project settings section sits at the bottom of the Acquisition tab in the fluorescence configuration, and the Open projects tab ends in a 'Settings for next project' drop-down (both visible, not explained)."
+source = "tamu, ieo"
+
+[[control]]
+task = "Save the project, start a new one, rename or delete images"
+where = "Go to the Open projects tab at the top of the left column. ucl saves by right-clicking the project or image there; a project with all its images is saved as one .lif file. ieo deletes unwanted images and renames the project there before saving, then starts the next sample with the New Project button on the same tab. The tab has a row of icon buttons at its top and a small disk icon at the right end of each project row (visible; which icon is New Project is not shown, our guess is the page with a plus sign)."
+source = "ieo, ucl, tamu"
+
+[[control]]
+task = "Open earlier images"
+where = "tamu opens a previously saved project file (.lif) and its images then appear on the Open projects tab; the guide does not say which button opens the file (our guess: the folder icon in the icon row at the top of that tab). Away from the microscope, tamu points to the free LAS X Office viewer, which can annotate and export but not analyse, and to Fiji/ImageJ, which opens .lif files directly."
 source = "tamu"
-
-[[control]]
-task = "Z-stack"
-where = "Switch on the 'z' toggle in the Acquisition Mode row at the top of the acquisition panel; the Z-stack settings with Begin and End then appear in the panel."
-source = "tamu, ieo"
-
-[[control]]
-task = "Time lapse"
-where = "Switch on the 't' toggle in the same Acquisition Mode row; the time-lapse settings then appear in the panel."
-source = "tamu, ieo"
-
-[[control]]
-task = "Multi-position experiment (several stage locations)"
-where = "The Stage Experiments button on the Acquire screen."
-source = "tamu"
-
-[[control]]
-task = "Tile scan or slide overview"
-where = "Open LAS X Navigator with the Navigator button. There, Spiral builds a preview of the area from stitched fields until you press Stop, and the Merge button on the Mosaic Merge sheet stitches a tile scan."
-source = "tamu, ieo"
 
 [[control]]
 task = "Reuse the settings of an earlier image"
-where = "Right-click the image in Open projects and choose Apply Image Settings."
+where = "Open the earlier project file (.lif), then right-click the image on the Open projects tab and choose Apply Image Settings."
 source = "tamu"
 
 [[control]]
 task = "Export an image"
-where = "Right-click the image in Open projects and choose the export entry."
-source = "ucl"
+where = "Right-click the image on the Open projects tab and choose the export entry; ucl uses this to get individual .tif files out of the project. The menu that appears after drawing a rectangle on the image also has an 'Export Image' entry (visible, not explained). No guide lists the other export formats."
+source = "ucl, tamu"
+
+[[control]]
+task = "Z-stack"
+where = "Switch on the 'z' toggle in the Acquisition Mode row at the top of the Acquisition tab; a Z-Stack section then appears lower in the same column. In live view focus to where the stack should start and press Begin, focus to where it should end and press End (tamu). ieo then runs the whole acquisition with Start on the bottom bar."
+source = "tamu, ieo"
+
+[[control]]
+task = "Z-stack step size, number of slices, extended depth of field"
+where = "At the bottom of the Z-Stack section: three options, 'Number of Steps', 'Z-Step Size' and 'System Optimized'. tamu keeps 'System Optimized', which sets the step from the objective and the fluorescence wavelength. Below them is a 'Calculate extended depth of field image' switch, and the section also has Z-Position, Z-Size, Re-Center and Stack Direction controls (all visible, not explained)."
+source = "tamu, ieo"
+
+[[control]]
+task = "Time lapse"
+where = "Switch on the 't' toggle in the Acquisition Mode row at the top of the Acquisition tab; the time-lapse settings (ieo lists time interval, duration and cycles) then appear in the Acquisition tab."
+source = "tamu, ieo"
+
+[[control]]
+task = "Multi-position experiment (several stage locations)"
+where = "The Stage Experiments button: the first icon button to the right of the x y z t toggles in the Acquisition Mode row at the top of the Acquisition tab."
+source = "tamu"
+
+[[control]]
+task = "Slide overview and moving the stage from the screen"
+where = "Open LAS X Navigator with the second icon button to the right of the x y z t toggles in the Acquisition Mode row. In Navigator press Live, then Spiral on the bottom bar, which builds a preview from stitched fields until you press Stop. The mouse wheel zooms the overview, dragging with the left button pans it, and double-clicking a spot moves the stage there."
+source = "ieo, tamu"
+
+[[control]]
+task = "Tile scan and stitching (merge)"
+where = "In LAS X Navigator, focus on the region, outline it with one of the shape tools (rectangle, polygon and others) in the middle of the bottom bar, and press Start at the bottom right. To stitch, switch to the Mosaic Merge sheet at the top left of Navigator and press Merge at the bottom right of the window. Close Navigator to return to the normal Acquire screen."
+source = "ieo, tamu"
+
+[[control]]
+task = "Focus and autofocus"
+where = "The guides focus by hand while Live is running: tamu uses the focus knob on the joystick or on the stand. An Autofocus button sits at the left end of the bottom bar, and the menu that appears after drawing a rectangle on the image has an Autofocus entry (both visible, not explained)."
+source = "tamu, ieo"
+
+[[control]]
+task = "Check which settings an image was taken with"
+where = "tamu reads these from a table it calls Image Properties, which lists channel name, filter cube, contrast method, lookup table, exposure time, gain and resolution. The guide does not say where Image Properties is opened."
+source = "tamu"
+
+[[control]]
+task = "Pixel size and calibration"
+where = "The line under the image shows the image size in µm. A Calibration link sits in the camera box of the Light Path panel, between Preferences and Linked Shading, and the tamu screenshot has what looks like a 'Calibration wizards' section at the bottom of the Acquisition tab (both visible, not explained). No guide describes calibrating; tamu only tabulates the pixel size per objective for its own two cameras."
+source = "tamu, ieo"
+
+[[control]]
+task = "Scale bar, annotations and measurements"
+where = "Not covered by any guide we have. An Annotations button sits at the left of the toolbar above the image, with unexplained icon buttons beside it (visible). That these are where a scale bar or measurement is added is our guess; say it is unconfirmed when pointing there."
+source = "tamu, ieo"
+
+[[control]]
+task = "Choose the configuration when the software starts"
+where = "A start-up dialog shown when LAS X is started. In the tamu screenshot it has a 'Configuration' drop-down, a 'Choose Configuration' drop-down under it (set to 'Standard Configuration', which is what tamu's filter-cube swap procedure asks for) and OK and Cancel buttons. ieo says to choose among its own named configurations for histology and fluorescence when opening the software, without showing the dialog."
+source = "tamu, ieo"
+
+[[control]]
+task = "Finish the session"
+where = "Save the project as a .lif file first, and do any export to other formats before leaving the software (tamu), then close LAS X before switching off the illuminator, microscope controller and camera. tamu says to keep the original .lif, which holds the acquisition settings as well as the images, and to copy the .lifex beside it if there is one."
+source = "tamu, ieo"
 
 [[trap]]
 symptom = "Easy Mode is selected"
-advice = "The guide tells users to make sure Easy Mode is not selected before imaging. It does not say why; our guess, not checked on a live system, is that Easy Mode shows a reduced set of controls, so it is worth checking if a panel described here cannot be found."
+advice = "tamu tells users to make sure Easy Mode is not selected before imaging; its screenshot shows an 'Enable Easy Mode' tick box in the Camera Preferences window (Preferences link in the camera box of the Light Path panel). The guide does not say why; our guess, not checked on a live system, is that Easy Mode shows a reduced set of controls, so it is worth checking if a panel described here cannot be found."
 source = "tamu"
 
 [[trap]]
 symptom = "The software opens to a hardware setup screen, not the microscope"
-advice = "The user has probably started the LAS X Hardware Configurator; the guide says to start LAS X itself."
+advice = "tamu warns users to start LAS X itself and not the separate 'LAS X Hardware Configurator' program. The guide does not show the Configurator, so matching it to this symptom is our guess."
 source = "tamu"
 
 [[trap]]
 symptom = "Apply Image Settings did not restore everything"
-advice = "The guide warns that some settings, such as the condenser aperture, do not always load correctly and need checking by hand."
+advice = "tamu warns that some settings, such as the condenser aperture, do not always load correctly and need checking by hand."
 source = "tamu"
 
 [[trap]]
-symptom = "Scale bar or measurements are wrong, or the objective did not change"
-advice = "On a manual stand the Magnification selector and Magnification Changer do not move anything; they must be set to match the objective and the 1.0x/1.5x lens actually in place, or the image scaling will be wrong."
+symptom = "Image scaling is wrong (for example the scale bar or a measurement), or the objective did not change"
+advice = "On the ucl stand the objective turret and the 1.5x changer are moved by hand, so the selection under Magnification and the Magnification Changer drop-down only record what is in place. ucl warns that the image scaling will be wrong unless the Magnification Changer matches the 1.0x or 1.5x lens actually in the light path; that a wrong objective selection also gives wrong scaling is our inference."
 source = "ucl"
+
+[[trap]]
+symptom = "Parts of the image are saturated (shown red in the over/under view)"
+advice = "Lower the illumination intensity or the exposure time until only a few saturated pixels are left, then switch the over/under view off again."
+source = "tamu, ucl"
+
+[[trap]]
+symptom = "The channel or dye name recorded with the image is wrong"
+advice = "tamu shows this happening when a filter-cube button is clicked directly: the microscope changes cube, but the channel keeps its old name and display colour. Switch by picking the dye in the upper pull-down of the channel box instead."
+source = "tamu"
+
+[[trap]]
+symptom = "Bit depth is not what was expected after loading a saved setting"
+advice = "tamu says to check the bit depth after applying a preset from 'Load/Save single setting': it is shown as 'Bit Resolution' under Configuration, Hardware."
+source = "tamu"
+
+[[trap]]
+symptom = "The camera is missing or not recognised in the software"
+advice = "On the tamu system the monochrome camera has to be switched on before LAS X is started, or it may not be recognised; the guide's order is camera first, then the software."
+source = "tamu"
+
+[[trap]]
+symptom = "Live is running but the image is blank, or the wrong camera is showing"
+advice = "Check which camera is selected (Preferences link in the camera box, then 'Set Camera to'): ieo has to change it when going from histology to fluorescence. Before going live, ieo also pulls a switch on the stand to send the light to the camera and ucl redirects the light path to the camera port (ucl does not name the control); this is hardware and not a control on screen. That either of these is the cause of a blank image is our inference."
+source = "ieo, ucl"
+
+[[trap]]
+symptom = "Reflected-light image is too bright even at the lowest intensity and a 1 ms exposure"
+advice = "On the tamu DM6 B with the DFC9000 GT monochrome camera, the guide switches the 'Gain List' for that channel to 'High Well Capacity'."
+source = "tamu"
+
+[[trap]]
+symptom = "Tile edges show in a stitched image, or the live view became slow"
+advice = "tamu describes Linked Shading as removing the illumination background so that stitched tiles do not show obvious edges. The Linked Shading window in the ieo screenshot warns that switching the correction on for the live image can lower the live frame rate, depending on camera and resolution."
+source = "tamu, ieo"
+
+[[trap]]
+symptom = "Weak fluorescence with the colour camera in Black and White mode"
+advice = "Where a monochrome camera is fitted as well, tamu says to switch to it, because it is much more sensitive than the colour camera in black-and-white mode."
+source = "tamu"
