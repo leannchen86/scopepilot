@@ -1,6 +1,8 @@
 from PIL import Image
 
-from scopepilot.evaluate import Case, Outcome, summarize
+import pytest
+
+from scopepilot.evaluate import Case, Outcome, load_cases, summarize
 from scopepilot.imaging import fit_within, zoom_region
 from scopepilot.profiles import available_profiles, load_profile
 from scopepilot.types import Box, Guidance
@@ -26,7 +28,7 @@ def test_summary_flags_unchecked_labels():
 
     text = summarize(outcomes)
 
-    assert "1 of 1 pointers landed" in text
+    assert "1 of 1 answers were right" in text
     assert "Only 0 of 1 labels have been checked" in text
 
 
@@ -58,3 +60,40 @@ def test_palette_screenshots_are_shrunk_with_real_resampling():
 
     assert shrunk.mode == "RGB"
     assert 100 < shrunk.getpixel((100, 1))[0] < 160
+
+
+def absent_case():
+    return Case("c2", "src", 1, 0, "add a scale bar", expect="absent", status="verified")
+
+
+def test_an_absent_case_is_right_only_when_no_control_is_pointed_at():
+    assert Outcome(absent_case(), answer(None)).hit
+    assert not Outcome(absent_case(), answer(Box(1, 1, 2, 2))).hit
+    assert not Outcome(absent_case(), None, "boom").hit
+
+
+def test_summary_splits_on_screen_and_not_on_screen():
+    outcomes = [
+        Outcome(case(), answer(Box(110, 105, 130, 115))),
+        Outcome(absent_case(), answer(None)),
+        Outcome(absent_case(), answer(Box(1, 1, 2, 2))),
+    ]
+
+    text = summarize(outcomes)
+
+    assert "2 of 3 answers were right" in text
+    assert "control on screen: 1 of 1 pointed at it; control not on screen: 1 of 2 said so" in text
+
+
+def test_cases_must_say_consistently_whether_the_control_is_there(tmp_path):
+    base = 'id = "x"\nsource = "s"\npage = 1\nimage = 0\nquestion = "q"\n'
+    good = tmp_path / "good.toml"
+    good.write_text(f"[[case]]\n{base}box = [1, 2, 3, 4]\n\n[[case]]\n{base}expect = \"absent\"\n")
+    present, absent = load_cases(good)
+    assert present.box == Box(1, 2, 3, 4) and absent.box is None
+
+    for body in (base, f'{base}box = [1, 2, 3, 4]\nexpect = "absent"\n', f'{base}expect = "maybe"\n'):
+        bad = tmp_path / "bad.toml"
+        bad.write_text(f"[[case]]\n{body}")
+        with pytest.raises(ValueError):
+            load_cases(bad)

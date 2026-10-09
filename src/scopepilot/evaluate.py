@@ -32,12 +32,15 @@ class Case:
     page: int
     image: int
     question: str
-    box: Box
-    """The labelled control, in pixels of the extracted image."""
+    box: Box | None = None
+    """The labelled control, in pixels of the extracted image. None when `expect` is absent."""
     control: str = ""
     """What the labelled control is, for the person checking the label."""
     status: str = "draft"
     """draft until a person has checked the label, then verified."""
+    expect: str = "present"
+    """present: the control is on this screenshot and `box` marks it.
+    absent: it is not on this screenshot, and the right answer is to say so."""
 
 
 @dataclass(frozen=True)
@@ -48,14 +51,27 @@ class Outcome:
 
     @property
     def hit(self) -> bool:
-        if self.guidance is None or self.guidance.box is None:
+        if self.guidance is None:
+            return False
+        if self.case.box is None:
+            return self.guidance.box is None
+        if self.guidance.box is None:
             return False
         return self.case.box.contains(*self.guidance.box.center)
 
 
 def load_cases(path: Path) -> list[Case]:
     raw = tomllib.loads(path.read_text(encoding="utf-8"))
-    return [Case(**{**entry, "box": Box(*entry["box"])}) for entry in raw.get("case", [])]
+    cases = []
+    for entry in raw.get("case", []):
+        expect = entry.get("expect", "present")
+        if expect not in ("present", "absent"):
+            raise ValueError(f"case {entry.get('id')}: expect must be present or absent")
+        if (expect == "present") != ("box" in entry):
+            raise ValueError(f"case {entry.get('id')}: a present case needs a box, an absent one must not have one")
+        box = Box(*entry["box"]) if "box" in entry else None
+        cases.append(Case(**{**entry, "box": box}))
+    return cases
 
 
 def run(
@@ -84,18 +100,27 @@ def run(
 def summarize(outcomes: list[Outcome]) -> str:
     lines = []
     for outcome in outcomes:
-        if outcome.error:
+        verdict = "HIT " if outcome.hit else "MISS"
+        if outcome.error or outcome.guidance is None:
             verdict = f"ERROR {outcome.error}"
-        elif outcome.guidance is None or outcome.guidance.box is None:
-            verdict = "MISS  said the control is not on screen"
+        elif outcome.guidance.box is None:
+            verdict += "  said the control is not on this screen"
         else:
-            verdict = "HIT " if outcome.hit else "MISS"
             verdict += f"  pointed at {outcome.guidance.label!r}"
+            if outcome.case.box is None:
+                verdict += ", but the control is not on this screen"
         lines.append(f"{outcome.case.id:<28} {verdict}")
     hits = sum(outcome.hit for outcome in outcomes)
     verified = [outcome for outcome in outcomes if outcome.case.status == "verified"]
     lines.append("")
-    lines.append(f"{hits} of {len(outcomes)} pointers landed on the labelled control.")
+    lines.append(f"{hits} of {len(outcomes)} answers were right.")
+    absent = [outcome for outcome in outcomes if outcome.case.box is None]
+    if absent:
+        present = len(outcomes) - len(absent)
+        lines.append(
+            f"  control on screen: {hits - sum(o.hit for o in absent)} of {present} pointed at it; "
+            f"control not on screen: {sum(o.hit for o in absent)} of {len(absent)} said so."
+        )
     if len(verified) < len(outcomes):
         lines.append(
             f"Only {len(verified)} of {len(outcomes)} labels have been checked by a person; "
@@ -116,9 +141,11 @@ def write_review(
     rows = []
     for case in cases:
         screenshot = Image.open(sources[case.source].image_path(case.page, case.image))
-        picture = annotate(screenshot, case.box)
+        picture = annotate(screenshot, case.box) if case.box else screenshot.convert("RGB")
         outcome = by_id.get(case.id)
         caption = f"label status: {case.status}"
+        if case.box is None:
+            caption += " · expected: not on this screen"
         if outcome is not None and outcome.guidance is not None and outcome.guidance.box:
             picture = annotate(picture, outcome.guidance.box, pad=0, color=(0, 122, 255))
             caption += f" · answer: {'hit' if outcome.hit else 'miss'} ({outcome.guidance.label})"
