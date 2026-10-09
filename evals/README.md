@@ -84,7 +84,7 @@ What the set needs next: controls that are not on the current screen, icon-only
 buttons with look-alikes, questions with no good answer, and screenshots from a
 layout the notes were not written from.
 
-## Second reading (9 October 2026)
+## Second reading (8 October 2026, later the same day)
 
 41 of 41 answers were right: 33 of 33 controls on screen were pointed at, and
 8 of 8 controls that were not on screen were reported as not there.
