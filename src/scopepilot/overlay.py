@@ -99,6 +99,8 @@ def grab(screen: QScreen) -> Image.Image:
     The size of the result is not assumed anywhere: `live.image_to_screen`
     works out the scale from it.
     """
+    if not live.capture_allowed():
+        raise OSError(live.CAPTURE_BLOCKED)
     return to_pil(screen.grabWindow(0).toImage())
 
 

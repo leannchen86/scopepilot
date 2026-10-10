@@ -1194,3 +1194,19 @@ def test_caption_title_when_the_model_names_no_control():
 
     assert live.caption(nothing).title == "Nothing to point at on this screen"
     assert live.caption(unnamed).title == "This control"
+
+
+def test_capture_is_always_allowed_off_macos(monkeypatch):
+    monkeypatch.setattr(live.sys, "platform", "win32")
+
+    assert live.capture_allowed() is True
+
+
+def test_a_blocked_capture_is_reported_instead_of_sending_the_wallpaper(monkeypatch):
+    qt = pytest.importorskip("PySide6.QtGui")
+    from scopepilot import overlay
+
+    monkeypatch.setattr(live, "capture_allowed", lambda: False)
+
+    with pytest.raises(OSError, match="Screen Recording"):
+        overlay.grab(qt.QGuiApplication.primaryScreen())

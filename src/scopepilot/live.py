@@ -19,6 +19,8 @@ Three coordinate spaces are in play, and names say which one a value is in:
 
 from __future__ import annotations
 
+import ctypes
+import sys
 from dataclasses import dataclass
 from types import ModuleType
 
@@ -47,6 +49,40 @@ class GuideUnavailable(OSError):
     An OSError so the command line reports it as one line, the way it reports a
     missing file, instead of a traceback.
     """
+
+
+CAPTURE_BLOCKED = (
+    "macOS is hiding your windows from this terminal, so only the wallpaper can be seen. "
+    "Allow the terminal app under System Settings > Privacy & Security > Screen Recording "
+    "(called Screen & System Audio Recording on newer versions), then quit and reopen it."
+)
+
+
+def capture_allowed() -> bool:
+    """Whether the system will let this process see other apps' windows.
+
+    Without the permission macOS does not refuse a capture: it hands over the
+    wallpaper with no windows on it, and the model then truthfully reports that
+    the software is not open. Asking first turns that into a message the user
+    can act on. Only macOS has this rule; anywhere else the answer is yes.
+    """
+    if sys.platform != "darwin":
+        return True
+    try:
+        graphics = ctypes.cdll.LoadLibrary(
+            "/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics"
+        )
+        allowed = graphics.CGPreflightScreenCaptureAccess
+        allowed.restype = ctypes.c_bool
+        if allowed():
+            return True
+        # Makes macOS show its own prompt once and list the app in Settings.
+        request = graphics.CGRequestScreenCaptureAccess
+        request.restype = ctypes.c_bool
+        return bool(request())
+    except (OSError, AttributeError):
+        # An unexpected macOS: carry on and let the capture speak for itself.
+        return True
 
 
 @dataclass(frozen=True)
