@@ -105,6 +105,26 @@ the things public screenshots cannot test:
 - a real screen: scaling, several monitors, dialogs in the way;
 - whether the answer arrives fast enough to help someone at the microscope.
 
+## What the notes and the prompt add (10 October 2026)
+
+The same 41 cases, answered three ways in stand-in runs, one run each:
+
+| Setup | Right |
+|---|---|
+| scopepilot's prompt and layout notes | 41 of 41 |
+| scopepilot's prompt, no notes | 39 of 41 |
+| A plain "helpful assistant" prompt, no notes | 37 of 41 |
+
+Every miss was an icon-only button with no text on it: the autofocus button,
+the Z-stack start button, the histogram button used for contrast, and the link
+that leads to the camera choice. In each miss the model said its confidence was
+low. All eight "not on this screen" cases were right in every setup.
+
+So a general model finds most controls by itself, and the notes matter where
+the screen does not say what a button does. Read the gap with care: it is two
+to four cases in a single run, and the notes were written from the same guides
+the screenshots come from, so they hold exactly the knowledge these cases need.
+
 ## Adding a case
 
 1. Run `scopepilot corpus fetch` and pick a screenshot from the cache.
