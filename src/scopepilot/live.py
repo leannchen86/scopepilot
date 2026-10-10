@@ -263,7 +263,14 @@ def arrange(
 
 
 def caption(guidance: Guidance) -> Caption:
-    title = guidance.label if guidance.box is not None else f"Not on this screen: {guidance.label}"
+    # The model leaves the label empty when the question is not about a control
+    # at all, or the screen is not showing the software.
+    if guidance.box is not None:
+        title = guidance.label or "This control"
+    elif guidance.label:
+        title = f"Not on this screen: {guidance.label}"
+    else:
+        title = "Nothing to point at on this screen"
     steps = tuple(f"{number}. {step}" for number, step in enumerate(guidance.steps, start=1))
     note = f"Note: {guidance.note}" if guidance.note else ""
     return Caption(title, steps, note, f"Confidence: {guidance.confidence}")

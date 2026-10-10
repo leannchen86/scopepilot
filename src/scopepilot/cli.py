@@ -38,8 +38,10 @@ def _print_guidance(guidance: Guidance) -> None:
         left, top, right, bottom = guidance.box.as_ints()
         print(f"Use: {guidance.label}")
         print(f"At:  left {left}, top {top}, right {right}, bottom {bottom} (pixels)")
-    else:
+    elif guidance.label:
         print(f"Not on this screen: {guidance.label}")
+    else:
+        print("Nothing to point at on this screen")
     for number, step in enumerate(guidance.steps, start=1):
         print(f"  {number}. {step}")
     if guidance.note:

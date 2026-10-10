@@ -55,7 +55,11 @@ class AnthropicBackend:
         client: Any = None,
     ) -> None:
         if client is None:
-            client = anthropic.Anthropic()
+            # A user-scoped key (sk-ant-usr-...) must name a workspace on every
+            # request; the SDK has no environment variable for it, so pass it here.
+            workspace = os.environ.get("ANTHROPIC_WORKSPACE_ID")
+            headers = {"anthropic-workspace-id": workspace} if workspace else None
+            client = anthropic.Anthropic(default_headers=headers)
         self._client = client
         self.model = model
         self.effort = effort

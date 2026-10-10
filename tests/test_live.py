@@ -1186,3 +1186,11 @@ def test_run_rejects_a_blank_question_and_a_negative_time(qt):
         qt.overlay.run(PROFILE, GatedBackend(NOT_ON_SCREEN), question="  ")
     with pytest.raises(ValueError, match="--seconds"):
         qt.overlay.run(PROFILE, GatedBackend(NOT_ON_SCREEN), question="q", seconds=-1)
+
+
+def test_caption_title_when_the_model_names_no_control():
+    nothing = Guidance(False, "", None, (), "high", note="This is not the microscope software.")
+    unnamed = Guidance(True, "", Box(1, 1, 5, 5), (), "low")
+
+    assert live.caption(nothing).title == "Nothing to point at on this screen"
+    assert live.caption(unnamed).title == "This control"
