@@ -60,8 +60,8 @@ that field is really in focus (15000.64 um, so the frame above is 0.64 um out),
 and an empty list, because nothing was hit.
 
 `scope.core` is the only thing a program under test should touch.
-`scope.sample`, `scope.truth_in_view()`, `scope.incidents` and `scope.refusals`
-are for whoever is marking it.
+`scope.sample`, `scope.truth_in_view()`, `scope.incidents`, `scope.refusals`
+and `scope.clearance_um()` are for whoever is marking it.
 
 ## What the core answers
 
@@ -165,6 +165,14 @@ scan is many incidents. Count those with `ongoing` false to count crashes.
 
 Focusing on the surface with any of the five objectives leaves about 1 mm of
 clearance or more and records nothing.
+
+For marking how close a program came without touching, `scope.clearance_um()`
+is the height of the front lens above the highest thing under the nose
+(negative while touching; over the bare stage plate it is measured to the
+plate), and `scope.clearance_along_um(x, y)` is the least clearance a straight
+stage move from here to `(x, y)` would pass through. The second is asked before
+the move and looks at the same points of the path as the contact check, so the
+two cannot disagree. A real microscope reports neither.
 
 ## Scoring against the truth
 

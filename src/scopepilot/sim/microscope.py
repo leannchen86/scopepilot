@@ -325,6 +325,19 @@ class SimMicroscope:
         """Every move refused for being outside the travel, oldest first."""
         return self.world.refusals
 
+    def clearance_um(self) -> float:
+        """How far the front lens is above the highest thing under the objective's
+        nose, now. Negative while touching. For whoever is marking: a real
+        microscope does not report it."""
+        world = self.world
+        return world.clearance_um(world.x_um, world.y_um, world.z_um, world.objective)
+
+    def clearance_along_um(self, x_um: float, y_um: float) -> float:
+        """The least clearance a straight stage move from here to (x_um, y_um)
+        would pass through, ends included. Ask before making the move. It
+        looks where the contact check looks, so the two cannot disagree."""
+        return self.world.clearance_along_um(float(x_um), float(y_um))
+
     def truth_in_view(self) -> Truth:
         """Ground truth for the field the camera sees now, region of interest included."""
         world = self.world

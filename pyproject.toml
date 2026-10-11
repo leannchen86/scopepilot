@@ -25,6 +25,11 @@ live = ["PySide6-Essentials>=6.12"]
 # hence the upper bound. The lower bounds are the oldest releases its tests have
 # been run against (numpy 2.0.2 and scipy 1.13.1, on Python 3.11).
 sim = ["numpy>=2", "scipy>=1.13", "pymmcore-plus>=0.18,<0.19"]
+# The test that scores an agent driving the simulated microscope
+# (scopepilot.bench). It needs the simulator's packages and nothing more: frames
+# are written with pillow, which scopepilot already requires.
+bench = ["numpy>=2", "scipy>=1.13", "pymmcore-plus>=0.18,<0.19"]
+# Everything above, plus pytest. `bench` adds no package that `sim` has not.
 dev = [
     "pytest>=8",
     "pypdf>=5",

@@ -727,6 +727,68 @@ def test_the_tall_5x_clears_the_mount_even_focused_on_the_stage_plate(scope):
     assert scope.incidents == []
 
 
+# --- clearance ------------------------------------------------------------------
+
+
+def test_clearance_is_the_working_distance_in_focus_and_negative_when_touching(scope):
+    core = scope.core
+    surface = focus(scope, "50x")
+    reach = OBJECTIVE["50x"].working_distance_um
+
+    # A little under the working distance: the tilted surface is higher under
+    # the far side of the nose than on the axis.
+    assert reach - 15.0 < scope.clearance_um() <= reach
+
+    core.setRelativePosition(-400.0)
+    assert scope.clearance_um() == pytest.approx(reach - 400.0, abs=15.0)
+    assert scope.incidents == []
+
+    core.setPosition(surface - reach - 200.0)
+    [incident] = scope.incidents
+    assert scope.clearance_um() == -incident.penetration_um
+
+
+def test_clearance_over_the_bare_stage_plate_is_measured_to_the_plate(scope):
+    core = scope.core
+    core.setXYPosition(*OFF_THE_MOUNT)
+    core.setConfig("Objective", "10x")
+    core.setPosition(0.0)
+
+    assert scope.clearance_um() == OBJECTIVE["10x"].working_distance_um
+
+
+def test_clearance_along_a_stage_move_sees_what_the_path_crosses(scope):
+    """Both ends of this move are over the bare plate with 12 mm to spare; in
+    between the nose passes over the rim of the mount with 1 mm."""
+    core = scope.core
+    core.setXYPosition(0.0, 21000.0)
+    core.setConfig("Objective", "10x")
+    core.setPosition(5000.0)  # front lens at 16 mm, the mount 15 mm high
+    there = (21000.0, 6000.0)
+    assert scope.clearance_um() == 16000.0
+
+    on_the_way = scope.clearance_along_um(*there)
+    core.setXYPosition(*there)
+
+    assert on_the_way == pytest.approx(1000.0, abs=20.0)
+    assert scope.clearance_um() == 16000.0
+    assert scope.incidents == []
+    assert scope.clearance_along_um(*there) == scope.clearance_um()  # a move to where it already is
+
+
+def test_clearance_along_a_move_agrees_with_the_contact_it_records(scope):
+    core = scope.core
+    core.setXYPosition(0.0, 21000.0)
+    core.setConfig("Objective", "10x")
+    core.setPosition(0.0)
+
+    on_the_way = scope.clearance_along_um(21000.0, 6000.0)
+    core.setXYPosition(21000.0, 6000.0)
+
+    [incident] = scope.incidents
+    assert on_the_way == -incident.penetration_um
+
+
 # --- the truth --------------------------------------------------------------------
 
 

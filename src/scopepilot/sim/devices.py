@@ -134,13 +134,45 @@ class World:
     def contrast(self) -> str:
         return CONTRASTS[self.contrast_index]
 
+    def clearance_um(self, x_um: float, y_um: float, z_um: float, objective: Objective) -> float:
+        """How far the front lens is above the highest thing under the nose:
+        the working distance when focused on a flat surface, negative when
+        touching. Over the bare stage plate it is measured to the plate."""
+        front_lens = z_um + objective.working_distance_um
+        return front_lens - self.sample.max_height_um(x_um, y_um, objective.front_radius_um)
+
+    def clearance_along_um(self, x_um: float, y_um: float) -> float:
+        """The least clearance on the straight stage path from here to (x_um,
+        y_um), both ends included, with the focus and objective as they are.
+
+        It is taken at the points `check_xy_move` examines, so a move that
+        records an incident has a negative clearance here and no other does.
+        """
+        dx, dy = x_um - self.x_um, y_um - self.y_um
+        return min(
+            self.clearance_um(self.x_um + t * dx, self.y_um + t * dy, self.z_um, self.objective)
+            for t in self._along(x_um, y_um)
+        )
+
+    def _along(self, x_um: float, y_um: float) -> list[float]:
+        """Where the straight stage path to (x_um, y_um) is examined, as
+        fractions of it: every half nose radius (48 steps at most), and at its
+        closest approach to the centre of the mount."""
+        dx, dy = x_um - self.x_um, y_um - self.y_um
+        distance = math.hypot(dx, dy)
+        if distance**2 == 0:  # no move, or one too small to square: the path is the point it starts at
+            return [0.0]
+        steps = min(48, math.ceil(distance / (self.objective.front_radius_um / 2)))
+        nearest = min(1.0, max(0.0, -(self.x_um * dx + self.y_um * dy) / distance**2))
+        return sorted({*np.linspace(0.0, 1.0, steps + 1).tolist(), nearest})
+
     def contact(self, x_um: float, y_um: float, z_um: float, objective: Objective) -> tuple[float, bool]:
         """How far the front lens is below the highest thing under the nose (0
         when clear), and whether any of the specimen is above the front lens."""
         front_lens = z_um + objective.working_distance_um
         if front_lens >= self._ceiling_um:
             return 0.0, False
-        depth = self.sample.max_height_um(x_um, y_um, objective.front_radius_um) - front_lens
+        depth = -self.clearance_um(x_um, y_um, z_um, objective)
         if depth <= 0:
             return 0.0, False
         ring = objective.front_radius_um * np.sqrt(np.arange(33) / 32.0)[:, None]
@@ -165,19 +197,16 @@ class World:
         """Record an incident if the straight path to (x_um, y_um) touches anything.
 
         The path is checked every half nose radius and at its closest approach
-        to the centre of the mount, so a move that only clips the mount's rim is
-        caught, and so is one that crosses the mount and ends clear of it. A
-        move that starts in contact counts, marked `ongoing`: the nose is being
-        dragged.
+        to the centre of the mount (see `_along`), so a move that only clips
+        the mount's rim is caught, and so is one that crosses the mount and
+        ends clear of it. A move that starts in contact counts, marked
+        `ongoing`: the nose is being dragged.
         """
         dx, dy = x_um - self.x_um, y_um - self.y_um
-        distance = math.hypot(dx, dy)
         objective = self.objective
-        if distance == 0 or self.z_um + objective.working_distance_um >= self._ceiling_um:
+        if (dx == 0 and dy == 0) or self.z_um + objective.working_distance_um >= self._ceiling_um:
             return
-        steps = min(48, math.ceil(distance / (objective.front_radius_um / 2)))
-        nearest = min(1.0, max(0.0, -(self.x_um * dx + self.y_um * dy) / distance**2))
-        along = sorted({*np.linspace(0.0, 1.0, steps + 1).tolist(), nearest})
+        along = self._along(x_um, y_um)
 
         def depth_at(t: float) -> tuple[float, bool]:
             return self.contact(self.x_um + t * dx, self.y_um + t * dy, self.z_um, objective)

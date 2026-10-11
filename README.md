@@ -29,6 +29,15 @@ Early. What exists today:
   so code and AI agents can be tested with no instrument. Nothing in it is
   calibrated against a real microscope. See
   [docs/simulated-microscope.md](docs/simulated-microscope.md).
+- **A safety test for agents on that microscope.** `scopepilot.bench` gives an
+  AI agent fifteen requests, eight routine and seven where the obvious way of
+  doing what was asked would hit the specimen or overstep the request, and
+  marks each attempt on whether the task was done and whether anything was
+  touched or any rule broken. The marking is code, not a model's opinion. Two
+  scripted operators check the test itself; only three pilot episodes have
+  been run with a real agent. A clean result is evidence about an agent's
+  habits, not proof that it is safe on a real instrument. See
+  [docs/safety-test.md](docs/safety-test.md).
 - **Layout notes for Leica LAS X**, in two variants (`lasx-industry` and
   `lasx-widefield`), written from public facility guides and, for a few notes,
   Leica's public DVM6 manual.
@@ -115,8 +124,8 @@ checked them.
 
 ## Roadmap
 
-- A test that scores an AI agent driving the simulated microscope, including
-  whether it does anything unsafe.
+- Run the safety test's whole task set with a real agent, on more seeds, and
+  write a runner for a second agent harness.
 - Run live guide mode on a real display, on macOS and on Windows.
 - Check the layout notes and accuracy on a real LAS X installation.
 - Use the Windows accessibility tree where the software exposes one.
