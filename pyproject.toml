@@ -20,7 +20,19 @@ corpus = ["pypdf>=5"]
 # Essentials is its core (QtCore, QtGui, QtWidgets) without the large add-ons.
 # 6.12 is the lowest release this code has been run against.
 live = ["PySide6-Essentials>=6.12"]
-dev = ["pytest>=8", "pypdf>=5", "PySide6-Essentials>=6.12"]
+# The pretend materials microscope in scopepilot.sim. Its Micro-Manager devices
+# use private parts of pymmcore-plus 0.18's experimental Python-device support,
+# hence the upper bound. The lower bounds are the oldest releases its tests have
+# been run against (numpy 2.0.2 and scipy 1.13.1, on Python 3.11).
+sim = ["numpy>=2", "scipy>=1.13", "pymmcore-plus>=0.18,<0.19"]
+dev = [
+    "pytest>=8",
+    "pypdf>=5",
+    "PySide6-Essentials>=6.12",
+    "numpy>=2",
+    "scipy>=1.13",
+    "pymmcore-plus>=0.18,<0.19",
+]
 
 [project.scripts]
 scopepilot = "scopepilot.cli:main"

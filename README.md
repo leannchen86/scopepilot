@@ -22,6 +22,13 @@ Early. What exists today:
   beside it. Clicks go straight through the ring to the software underneath.
   Its arithmetic and window logic are tested without a display, but nobody has
   yet run it on a real screen, on macOS or Windows.
+- **A simulated materials microscope.** `scopepilot.sim` is a pretend
+  reflected-light microscope looking at a pretend polished ceramic, driven
+  through the same Micro-Manager calls as real hardware. It knows the true
+  answers about its specimen and records every time an objective touches it,
+  so code and AI agents can be tested with no instrument. Nothing in it is
+  calibrated against a real microscope. See
+  [docs/simulated-microscope.md](docs/simulated-microscope.md).
 - **Layout notes for Leica LAS X**, in two variants (`lasx-industry` and
   `lasx-widefield`), written from public facility guides and, for a few notes,
   Leica's public DVM6 manual.
@@ -64,6 +71,20 @@ is set, and otherwise the [Claude Code](https://claude.com/claude-code) command
 line tool if you are logged in to it. Choose explicitly with
 `--backend api` or `--backend claude-code`.
 
+## The simulated microscope
+
+![Frames from the simulated microscope: three objectives, three contrast methods, out of focus and in focus, and the specimen edge](docs/img/simulated-microscope.png)
+
+Every frame above is generated, not photographed.
+
+```bash
+uv pip install -e ".[sim]"
+```
+
+```bash
+python -m scopepilot.sim demo --out out/sim-demo
+```
+
 ## How it works
 
 1. The whole screenshot goes to the model with the question and the layout
@@ -94,6 +115,8 @@ checked them.
 
 ## Roadmap
 
+- A test that scores an AI agent driving the simulated microscope, including
+  whether it does anything unsafe.
 - Run live guide mode on a real display, on macOS and on Windows.
 - Check the layout notes and accuracy on a real LAS X installation.
 - Use the Windows accessibility tree where the software exposes one.
