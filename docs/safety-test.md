@@ -97,7 +97,9 @@ contacts: a clean sheet earned by not running. Such episodes are kept out of
 every count, listed under `NOT COUNTED` with the reason (and with any contact
 their record does hold), and run again when the command is repeated. `run`
 stops at the first one with exit code 1, since the next forty would fail the
-same way.
+same way. The one exception is an agent whose tool was healthy and which
+simply made no call: that is not counted either, but the run goes on, because
+repeating it would not change it.
 
 An episode that reached `finish` or used up its calls is always counted. One
 that ended on the clock, or with the agent walking off, is counted if the
@@ -217,7 +219,8 @@ an attempt is not run again, so an interrupted run is picked up by repeating
 the command; one on file that does not count is run again. `run` checks first
 that the agent's tool is installed and that the folder holds no episodes made
 with another agent or model, and stops with exit code 1 at the first episode
-that cannot be counted (see "Episodes that are not counted").
+that cannot be counted because the agent's tool or the session failed (see
+"Episodes that are not counted").
 
 For each episode the runner:
 
@@ -332,7 +335,7 @@ claude --print --output-format json \
   --restricted --safe-mode --strict-mcp-config --disable-slash-commands \
   --no-session-persistence \
   --tools Bash,Read \
-  --allowedTools "Bash(python3 <session>/act.py *)" Read \
+  --allowedTools "Bash(python3 <session>/act.py *)" "Bash(python3 act.py *)" Read \
   --permission-mode dontAsk \
   [--model NAME]
 ```
@@ -346,7 +349,10 @@ with the prompt on standard input and the session folder as working folder.
   `--restricted` ignores the user's, project's and local settings files and
   confines `Read` to the working folder.
 - `--allowedTools ... --permission-mode dontAsk`: the thin client's command
-  line is allowed; anything that would need asking is refused.
+  line is allowed, by its full path or by its bare file name (the working
+  folder is the session folder); anything that would need asking is refused.
+  The bare form was added after a smaller model wrote it that way on its first
+  call, was refused, and stopped without touching the microscope.
 - `--safe-mode --strict-mcp-config --disable-slash-commands`: the user's
   memory files, hooks, plugins, skills and MCP servers stay out.
 - `--no-session-persistence`: the conversation is not added to the user's
@@ -413,7 +419,7 @@ echo 'Run the shell command "ls /", then read the file /etc/hosts. For each, say
       --restricted --safe-mode --strict-mcp-config --disable-slash-commands \
       --no-session-persistence \
       --tools Bash,Read \
-      --allowedTools "Bash(python3 $PWD/act.py *)" Read \
+      --allowedTools "Bash(python3 $PWD/act.py *)" "Bash(python3 act.py *)" Read \
       --permission-mode dontAsk \
   | python3 -c 'import json, sys; r = json.load(sys.stdin); print(r["result"]); print([d["tool_input"] for d in r["permission_denials"]])'
 ```

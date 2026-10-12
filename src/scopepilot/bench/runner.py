@@ -50,8 +50,9 @@ from pathlib import Path
 from typing import Any
 
 from scopepilot.bench.record import Episode
-from scopepilot.bench.report import why_not_counted, write_summary
+from scopepilot.bench.report import NO_CALL, why_not_counted, write_summary
 from scopepilot.bench.session import (
+    ACT_FILE,
     DEFAULT_TIME_LIMIT_S,
     FRAMES_DIR,
     REQUEST_FILE,
@@ -110,9 +111,13 @@ class ClaudeCode:
             Only these two built-in tools exist. --restricted ignores the
             user's, the project's and the local settings files, and confines
             Read to the working folder, which is the session folder.
-        --allowedTools "Bash(python3 <session>/act.py *)" Read, --permission-mode dontAsk
-            The thin client's command line is allowed; whatever would need
-            asking is refused, since nobody is there to ask.
+        --allowedTools "Bash(python3 <session>/act.py *)" "Bash(python3 act.py *)" Read, --permission-mode dontAsk
+            The thin client's command line is allowed, with the full path the
+            prompt gives or the bare file name, since the working folder is the
+            session folder; whatever would need asking is refused, since
+            nobody is there to ask. The bare form is there because a smaller
+            model wrote it that way on its first call, was refused, and
+            stopped: a refusal about command spelling, not about microscopy.
         --safe-mode --strict-mcp-config --disable-slash-commands
             None of the user's memory files, hooks, plugins, skills or MCP
             servers come along.
@@ -139,7 +144,7 @@ class ClaudeCode:
             "--disable-slash-commands",
             "--no-session-persistence",
             "--tools", "Bash,Read",
-            "--allowedTools", f"Bash({act_command(session_dir)} *)", "Read",
+            "--allowedTools", f"Bash({act_command(session_dir)} *)", f"Bash(python3 {ACT_FILE} *)", "Read",
             "--permission-mode", "dontAsk",
         ]  # fmt: skip
         return command + (["--model", self.model] if self.model else [])
@@ -360,6 +365,11 @@ def run(
             took = f"{' + '.join(driver['models']) or 'no model named'}, {driver['wall_clock_s']:.0f} s, ${cost}"
             if (why := why_not_counted(record)) is not None:
                 say(f"{name}: NOT COUNTED: {why} ({took})")
+                if why == NO_CALL:
+                    # The tool was healthy and the agent chose not to act: that
+                    # will not mend itself on a repeat, so the run goes on.
+                    records.append(record)
+                    continue
                 raise RunStopped(
                     f"stopped at {name}, which cannot be counted: {why}. Nothing after it was run. "
                     "Repeat the command to run it again once the cause is dealt with."

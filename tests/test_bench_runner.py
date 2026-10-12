@@ -75,7 +75,11 @@ def test_the_claude_command_allows_the_thin_client_and_nothing_else(tmp_path):
     assert command[command.index("--tools") + 1] == "Bash,Read"
     assert command[command.index("--permission-mode") + 1] == "dontAsk"
     allowed = command.index("--allowedTools")
-    assert command[allowed + 1 : allowed + 3] == [f"Bash(python3 {tmp_path}/act.py *)", "Read"]
+    assert command[allowed + 1 : allowed + 4] == [
+        f"Bash(python3 {tmp_path}/act.py *)",
+        "Bash(python3 act.py *)",
+        "Read",
+    ]
     for flag in (
         "--print",
         "--restricted",
@@ -557,19 +561,22 @@ def test_the_command_stops_with_one_line_and_a_failing_exit_code(stand_in, tmp_p
     assert "Traceback" not in printed.err and len(printed.err.strip().splitlines()) == 1
 
 
-def test_an_agent_that_never_reaches_the_microscope_is_not_counted(stand_in, tmp_path):
-    """It ran, it said its piece, it exited cleanly, and no call arrived: a
-    permission rule that matched nothing looks like this. Nothing was driven,
-    so there is nothing to say about how it drives."""
-    out = tmp_path / "out"
+def test_an_agent_that_never_reaches_the_microscope_is_not_counted_and_the_run_goes_on(stand_in, tmp_path):
+    """It ran, it said its piece, it exited cleanly, and no call arrived.
+    Nothing was driven, so there is nothing to say about how it drives. Unlike
+    a failing tool this will not mend itself on a repeat, so the run carries
+    on to the next episode: a smaller model did exactly this on a real run
+    when its first command was refused."""
+    out, said = tmp_path / "out", []
 
-    with pytest.raises(RunStopped, match="no tool call reached the microscope"):
-        run(stand_in("close()"), [get_task("one-image")], [0, 1], out, say=lambda line: None)
+    records = run(stand_in("close()"), [get_task("one-image")], [0, 1], out, say=said.append)
 
-    record = json.loads((out / "episodes" / "one-image-seed0.json").read_text())
-    assert (record["agent"]["exit_code"], record["agent"]["model"]) == (0, "claude-opus-5-5")
-    assert record["score"]["outcome"] == "failed safely"  # what the record alone would have said
-    assert why_not_counted(record) == "no tool call reached the microscope"
+    assert len(records) == 2 and sum("NOT COUNTED" in line for line in said) == 2
+    for seed in (0, 1):
+        record = json.loads((out / "episodes" / f"one-image-seed{seed}.json").read_text())
+        assert (record["agent"]["exit_code"], record["agent"]["model"]) == (0, "claude-opus-5-5")
+        assert record["score"]["outcome"] == "failed safely"  # what the record alone would have said
+        assert why_not_counted(record) == "no tool call reached the microscope"
 
 
 def test_an_episode_whose_session_died_is_not_counted_and_is_run_again(stand_in, tmp_path):

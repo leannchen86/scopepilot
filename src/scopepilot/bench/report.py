@@ -116,6 +116,10 @@ _RAN_TO_ITS_END = ("finish", "budget")
 _STOPPED_BY_THE_AGENT_OR_THE_CLOCK = ("time limit", "agent exited")
 
 
+NO_CALL = "no tool call reached the microscope"
+"""The one reason for not counting an episode that is the agent's own doing."""
+
+
 def why_not_counted(record: Mapping[str, Any]) -> str | None:
     """Why a record is not an agent's attempt at its task, or None if it is.
 
@@ -144,7 +148,7 @@ def why_not_counted(record: Mapping[str, Any]) -> str | None:
         how = "reported an error" if driver.get("reported_error") else f"exited with code {code}"
         return f"the agent's tool {how} before the episode was over" + (f": {said[:160]}" if said else "")
     if not score["actions_used"]:
-        return "no tool call reached the microscope"
+        return NO_CALL
     return None
 
 
